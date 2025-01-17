@@ -42,6 +42,9 @@ document.getElementById('loginBtn').addEventListener('click', login);
 document.getElementById('signupBtn').addEventListener('click', signup);
 document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
 document.getElementById('deleteAccountBtn').addEventListener('click', deleteAccount);
+document.getElementById('closeSettingsBtn').addEventListener('click', function () {
+    document.getElementById('settingsModal').style.display = 'none';
+});
 // Add these global variables at the top with your other variables
 let selectedNotes = new Set();
 let isReadingAloud = false;
