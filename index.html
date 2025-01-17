@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note-Taking App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>Note-Taking App</h1>
+            <nav>
+                <button id="createNoteBtn">Create Note</button>
+                <button id="settingsBtn">Settings</button>
+                <button id="logoutBtn">Logout</button>
+            </nav>
+        </header>
+        <main>
+            <aside id="noteList">
+                <!-- Note list will be populated here -->
+            </aside>
+            <section id="noteContent">
+                <div id="noteMetadata">
+                    <!-- Metadata will be displayed here -->
+                </div>
+                <div id="noteEditor">
+                    <input type="text" id="noteTitle" placeholder="Note Title">
+                    <textarea id="noteBody" placeholder="Start typing your note..."></textarea>
+                </div>
+                <div id="noteActions">
+                    <button id="saveNoteBtn">Save</button>
+                    <button id="deleteNoteBtn">Delete</button>
+                    <button id="exportNoteBtn">Export</button>
+                    <button id="shareNoteBtn">Share</button>
+                    <button id="syncNoteBtn" style="display: none;">Sync</button>
+                    <button id="textToSpeechBtn" style="display: none;">Read Aloud</button>
+                </div>
+            </section>
+        </main>
+    </div>
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h2>Login / Sign Up</h2>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button id="loginBtn">Login</button>
+            <button id="signupBtn">Sign Up</button>
+        </div>
+    </div>
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <h2>Settings</h2>
+            <label for="bgColor">Background Color:</label>
+            <input type="color" id="bgColor">
+            <label for="fontColor">Font Color:</label>
+            <input type="color" id="fontColor">
+            <label for="fontStyle">Font Style:</label>
+            <select id="fontStyle">
+                <option value="Arial, sans-serif">Arial</option>
+                <option value="Times New Roman, serif">Times New Roman</option>
+                <option value="Courier New, monospace">Courier New</option>
+            </select>
+            <label for="textToSpeech">
+                <input type="checkbox" id="textToSpeech"> Enable Text-to-Speech
+            </label>
+            <button id="saveSettingsBtn">Save Settings</button>
+            <button id="deleteAccountBtn">Delete Account</button>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
