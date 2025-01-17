@@ -40,7 +40,7 @@ main {
     border-radius: 4px;
     transition: background-color 0.2s;
     background-color: #000000;
-    color:white;
+    color: white;
 }
 
 #noteList div:hover {
@@ -53,7 +53,7 @@ main {
     flex-direction: column;
     padding: 1rem;
     min-width: 0;
-    color:white;
+    color: white;
     background-color: #000000;
     /* Add this to prevent content overflow */
 }
@@ -69,7 +69,8 @@ main {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    color:rgb(0, 0, 0); /* DO NOT CHANGE AHHHHH*/
+    color: rgb(0, 0, 0);
+    /* DO NOT CHANGE AHHHHH*/
 }
 
 #noteTitle {
@@ -78,7 +79,7 @@ main {
     border: 1px solid #ffffff;
     border-radius: 4px;
     background-color: #000000;
-    color:white;
+    color: white;
 }
 
 #noteBody {
@@ -87,7 +88,7 @@ main {
     padding: 0.5rem;
     border: 1px solid #ffffff;
     border-radius: 4px;
-    color:white;
+    color: white;
     background-color: #000000;
 }
 
@@ -183,9 +184,116 @@ select {
 }
 
 h2 {
-    color:white;
+    color: white;
 }
 
 .bgColor {
-    color:white;
+    color: white;
+}
+
+/* Updated button styles with more rounded corners and smoother hover effect */
+button {
+    margin: 0.25rem;
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    /* More rounded corners */
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Custom checkbox styling */
+.note-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.note-checkbox:checked {
+    background-color: #007bff;
+}
+
+.note-checkbox:checked::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 14px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Modal improvements */
+.modal-content {
+    background-color: #000000;
+    margin: 10% auto;
+    padding: 2rem;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 15px;
+    position: relative;
+}
+
+/* Close button for settings */
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #fff;
+    background: none;
+    border: none;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-modal:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: none;
+    box-shadow: none;
+}
+
+/* Logo styling */
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo-container img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+/* Enhanced font selector */
+#fontStyle {
+    background-color: #000000;
+    color: white;
+    padding: 8px;
+    border: 1px solid #ffffff;
+    border-radius: 4px;
+    width: 100%;
+    margin-bottom: 1rem;
 }

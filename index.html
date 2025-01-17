@@ -6,12 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chalk</title>
     <link rel="stylesheet" href="styles.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Open+Sans:wght@400;600&family=Montserrat:wght@400;500&family=Playfair+Display:wght@400;500&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
     <div id="app">
         <header>
-            <h1>Logo</h1>
+            <div class="logo-container">
+                <img src="Media/chalkboard(1).png" style="width: 150px; height: 100000;">
+            </div>
             <nav>
                 <button id="createNoteBtn">Create Note</button>
                 <button id="settingsBtn">Settings</button>
@@ -59,6 +64,7 @@
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <h2>Settings</h2>
+            <button class="close-modal" id="closeSettingsBtn">&times;</button>
             <label for="bgColor" style="color: white;">Background Color:</label>
             <input type="color" id="bgColor">
             <label for="fontColor" style="color: white;">Font Color:</label>
@@ -68,6 +74,12 @@
                 <option value="Arial, sans-serif">Arial</option>
                 <option value="Times New Roman, serif">Times New Roman</option>
                 <option value="Courier New, monospace">Courier New</option>
+                <option value="Georgia, serif">Georgia</option>
+                <option value="Verdana, sans-serif">Verdana</option>
+                <option value="Roboto, sans-serif">Roboto</option>
+                <option value="Open Sans, sans-serif">Open Sans</option>
+                <option value="Montserrat, sans-serif">Montserrat</option>
+                <option value="Playfair Display, serif">Playfair Display</option>
             </select>
             <label for="textToSpeech">
                 <input type="checkbox" id="textToSpeech" style="color: white"> Enable Text-to-Speech </label>
@@ -79,7 +91,18 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    
+    
     <script src="script.js"></script>
+
+
+    <script src="Backend/authentication.js"></script>
+    <script src="Events/buttonHandling.js"></script>
+    <script src="Events/noteManagement.js"></script>
+    <script src="Events/settings.js"></script>
+    <script src="Featureset/readText.js"></script>
+    <script src="Featureset/exportAs.js"></script>
+    <script src="Backend/acountManagement.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </body>
 

@@ -164,7 +164,6 @@ function deleteNote() {
     }
 
     if (!confirm('Are you sure you want to delete this note? This action cannot be undone.')) {
-        window.location.reload(); // or history.go(0);
         return;
     }
 
@@ -175,7 +174,6 @@ function deleteNote() {
             alert('Note deleted successfully');
             currentNote = null;
             clearNoteDisplay();
-            window.location.reload(); // or history.go(0);
             loadNotes(); // Refresh the note list
         })
         .catch((error) => {
@@ -286,7 +284,6 @@ function deleteSelectedNotes() {
         .then(() => {
             alert('Selected notes deleted successfully');
             selectedNotes.clear();
-            window.location.reload(); // or history.go(0);
             clearNoteDisplay();
             loadNotes();
         })
@@ -315,7 +312,6 @@ function deleteAllNotes() {
             alert('All notes deleted successfully');
             selectedNotes.clear();
             clearNoteDisplay();
-            window.location.reload(); // or history.go(0);
             loadNotes();
         })
         .catch((error) => {
