@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Note-Taking App</title>
+    <title>Chalk</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <div id="app">
         <header>
-            <h1>Note-Taking App</h1>
+            <h1>Logo</h1>
             <nav>
                 <button id="createNoteBtn">Create Note</button>
                 <button id="settingsBtn">Settings</button>
@@ -54,24 +54,23 @@
             <input type="password" id="password" placeholder="Password">
             <button id="loginBtn">Login</button>
             <button id="signupBtn">Sign Up</button>
-            <input type="password" id="encryptionKey" placeholder="Enter your encryption key">
         </div>
     </div>
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <h2>Settings</h2>
-            <label for="bgColor">Background Color:</label>
+            <label for="bgColor" style="color: white;">Background Color:</label>
             <input type="color" id="bgColor">
-            <label for="fontColor">Font Color:</label>
+            <label for="fontColor" style="color: white;">Font Color:</label>
             <input type="color" id="fontColor">
-            <label for="fontStyle">Font Style:</label>
+            <label for="fontStyle" style="color: white;">Font Style:</label>
             <select id="fontStyle">
                 <option value="Arial, sans-serif">Arial</option>
                 <option value="Times New Roman, serif">Times New Roman</option>
                 <option value="Courier New, monospace">Courier New</option>
             </select>
             <label for="textToSpeech">
-                <input type="checkbox" id="textToSpeech"> Enable Text-to-Speech
+                <input type="checkbox" id="textToSpeech" style="color: white"> Enable Text-to-Speech </label>
             </label>
             <button id="saveSettingsBtn">Save Settings</button>
             <button id="deleteAccountBtn">Delete Account</button>
@@ -82,7 +81,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
     <script src="script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </body>
 
 </html>

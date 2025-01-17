@@ -51,62 +51,20 @@ document.getElementById('deleteSelectedBtn').addEventListener('click', deleteSel
 document.getElementById('deleteAllBtn').addEventListener('click', deleteAllNotes);
 document.getElementById('readSelectedBtn').addEventListener('click', readSelectedNotes);
 // Authentication functions
-async function login() {
+function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    const encryptionKeyInput = document.getElementById('encryptionKey').value;
 
-    try {
-        // First, authenticate with Firebase
-        const userCredential = await auth.signInWithEmailAndPassword(username, password);
-        currentUser = userCredential.user;
-
-        // Get user's encryption data from Firestore
-        const userDoc = await db.collection('users').doc(currentUser.uid).get();
-        const userData = userDoc.data();
-
-        if (userData && userData.encryptionSalt) {
-            if (!encryptionKeyInput) {
-                await logout();
-                alert('Encryption key is required to access your notes');
-                return;
-            }
-
-            // Derive the key using the stored salt
-            encryptionKey = encryptionUtils.deriveKey(encryptionKeyInput, userData.encryptionSalt);
-
-            // Test the encryption key by trying to decrypt a test value
-            if (userData.testEncrypted) {
-                try {
-                    encryptionUtils.decrypt(userData.testEncrypted, encryptionKey);
-                } catch (error) {
-                    await logout();
-                    alert('Invalid encryption key');
-                    return;
-                }
-            }
-        }
-
-        loginModal.style.display = 'none';
-        loadNotes();
-    } catch (error) {
-        console.error('Login error:', error);
-        if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
-            alert('Invalid email or password');
-        } else {
+    auth.signInWithEmailAndPassword(username, password)
+        .then((userCredential) => {
+            currentUser = userCredential.user;
+            loginModal.style.display = 'none';
+            loadNotes();
+        })
+        .catch((error) => {
+            console.error('Login error:', error);
             alert('Login failed. Please check your credentials.');
-        }
-    }
-}
-
-function showLoginModal() {
-    // Clear previous values
-    document.getElementById('username').value = '';
-    document.getElementById('password').value = '';
-    document.getElementById('encryptionKey').value = '';
-
-    // Show the modal
-    loginModal.style.display = 'block';
+        });
 }
 
 firebase.auth().onAuthStateChanged((user) => {
@@ -119,31 +77,31 @@ firebase.auth().onAuthStateChanged((user) => {
     }
 });
 
-async function signup() {
+function showLoginModal() {
+    loginModal.style.display = 'block';
+}
+
+function signup() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    try {
-        const userCredential = await auth.createUserWithEmailAndPassword(username, password);
-        currentUser = userCredential.user;
-
-        // Set up encryption
-        encryptionKey = await setupEncryption();
-
-        loginModal.style.display = 'none';
-        loadNotes();
-    } catch (error) {
-        console.error('Signup error:', error);
-        alert('Signup failed. Please try again.');
-    }
+    auth.createUserWithEmailAndPassword(username, password)
+        .then((userCredential) => {
+            currentUser = userCredential.user;
+            loginModal.style.display = 'none';
+            setupEncryption();
+        })
+        .catch((error) => {
+            console.error('Signup error:', error);
+            alert('Signup failed. Please try again.');
+        });
 }
 
 function logout() {
-    encryptionKey = null; // Clear the encryption key
     auth.signOut()
         .then(() => {
             currentUser = null;
-            showLoginModal();
+            loginModal.style.display = 'block';
             clearNoteDisplay();
         })
         .catch((error) => {
@@ -166,40 +124,38 @@ function createNote() {
     displayNote(currentNote);
 }
 
-async function saveNote() {
+function saveNote() {
     if (!currentUser || !currentNote) {
         alert('Please create a note first');
         return;
     }
 
-    try {
-        const noteData = {
-            id: currentNote.id,
-            title: noteTitle.value || 'Untitled',
-            createdAt: currentNote.createdAt || firebase.firestore.Timestamp.now(),
-            updatedAt: firebase.firestore.Timestamp.now(),
-            author: currentUser.email,
-            shared: currentNote.shared || false
-        };
+    // Create note data with proper timestamp handling
+    const noteData = {
+        id: currentNote.id,
+        title: noteTitle.value || 'Untitled',
+        body: noteBody.value || '',
+        createdAt: currentNote.createdAt || firebase.firestore.Timestamp.now(),
+        updatedAt: firebase.firestore.Timestamp.now(),
+        author: currentUser.email,
+        shared: currentNote.shared || false,
+        encrypted: encryptionKey ? true : false,
+        content: encryptionKey ? encryptData(noteBody.value) : noteBody.value
+    };
 
-        // Encrypt the note content if encryption is enabled
-        if (encryptionKey) {
-            noteData.encrypted = true;
-            noteData.title = encryptionUtils.encrypt(noteData.title, encryptionKey);
-            noteData.body = encryptionUtils.encrypt(noteBody.value || '', encryptionKey);
-        } else {
-            noteData.encrypted = false;
-            noteData.body = noteBody.value || '';
-        }
-
-        await db.collection('notes').doc(noteData.id).set(noteData);
-        currentNote = noteData;
-        alert('Note saved successfully!');
-        loadNotes();
-    } catch (error) {
-        console.error('Error saving note:', error);
-        alert('Failed to save note. Please try again.');
-    }
+    // Save to Firestore with proper error handling
+    db.collection('notes')
+        .doc(noteData.id)
+        .set(noteData)
+        .then(() => {
+            currentNote = noteData;
+            alert('Note saved successfully!');
+            loadNotes(); // Refresh the note list
+        })
+        .catch((error) => {
+            console.error('Error saving note:', error);
+            alert('Failed to save note. Please try again.');
+        });
 }
 function deleteNote() {
     if (!currentNote || !currentNote.id) {
@@ -208,6 +164,7 @@ function deleteNote() {
     }
 
     if (!confirm('Are you sure you want to delete this note? This action cannot be undone.')) {
+        window.location.reload(); // or history.go(0);
         return;
     }
 
@@ -218,6 +175,7 @@ function deleteNote() {
             alert('Note deleted successfully');
             currentNote = null;
             clearNoteDisplay();
+            window.location.reload(); // or history.go(0);
             loadNotes(); // Refresh the note list
         })
         .catch((error) => {
@@ -328,6 +286,7 @@ function deleteSelectedNotes() {
         .then(() => {
             alert('Selected notes deleted successfully');
             selectedNotes.clear();
+            window.location.reload(); // or history.go(0);
             clearNoteDisplay();
             loadNotes();
         })
@@ -356,6 +315,7 @@ function deleteAllNotes() {
             alert('All notes deleted successfully');
             selectedNotes.clear();
             clearNoteDisplay();
+            window.location.reload(); // or history.go(0);
             loadNotes();
         })
         .catch((error) => {
@@ -458,26 +418,14 @@ function displayNote(note) {
     if (!note) return;
 
     currentNote = note;
-    try {
-        if (note.encrypted && encryptionKey) {
-            // Decrypt the note content
-            noteTitle.value = encryptionUtils.decrypt(note.title, encryptionKey);
-            noteBody.value = encryptionUtils.decrypt(note.body, encryptionKey);
-        } else {
-            noteTitle.value = note.title || '';
-            noteBody.value = note.body || '';
-        }
+    noteTitle.value = note.title || '';
+    noteBody.value = note.body || '';
 
-        const createdDate = note.createdAt ? note.createdAt.toDate().toLocaleString() : 'Unknown';
-        const updatedDate = note.updatedAt ? note.updatedAt.toDate().toLocaleString() : 'Unknown';
+    const createdDate = note.createdAt ? note.createdAt.toDate().toLocaleString() : 'Unknown';
+    const updatedDate = note.updatedAt ? note.updatedAt.toDate().toLocaleString() : 'Unknown';
 
-        noteMetadata.textContent = `Created: ${createdDate} | Updated: ${updatedDate} | Author: ${note.author} ${note.encrypted ? '| 🔒 Encrypted' : ''}`;
-        document.getElementById('syncNoteBtn').style.display = note.shared ? 'inline-block' : 'none';
-    } catch (error) {
-        console.error('Error displaying note:', error);
-        alert('Failed to decrypt note. Please check your encryption key.');
-        clearNoteDisplay();
-    }
+    noteMetadata.textContent = `Created: ${createdDate} | Updated: ${updatedDate} | Author: ${note.author}`;
+    document.getElementById('syncNoteBtn').style.display = note.shared ? 'inline-block' : 'none';
 }
 
 function clearNoteDisplay() {
@@ -727,16 +675,13 @@ function setupEncryption() {
 
 function encryptData(data) {
     if (!encryptionKey) return data;
-    // Implement encryption logic here (e.g., using Web Crypto API)
-    return data; // Placeholder
+    return btoa(unescape(encodeURIComponent(data)) + encryptionKey);
 }
 
 function decryptData(data) {
     if (!encryptionKey) return data;
-    // Implement decryption logic here
-    return data; // Placeholder
+    return decodeURIComponent(escape(atob(data.replace(encryptionKey, ''))));
 }
-
 // Add these new functions:
 function closeSettings() {
     settingsModal.style.display = 'none';
@@ -786,128 +731,5 @@ function initializeApp() {
         showLoginModal();
     }
 }
-// Encryption utilities
-const encryptionUtils = {
-    generateSalt: () => {
-        return CryptoJS.lib.WordArray.random(128 / 8).toString();
-    },
 
-    deriveKey: (password, salt) => {
-        return CryptoJS.PBKDF2(password, salt, {
-            keySize: 256 / 32,
-            iterations: 1000
-        }).toString();
-    },
-
-    encrypt: (data, key) => {
-        try {
-            const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), key);
-            return encrypted.toString();
-        } catch (error) {
-            console.error('Encryption error:', error);
-            throw new Error('Failed to encrypt data');
-        }
-    },
-
-    decrypt: (encryptedData, key) => {
-        try {
-            const decrypted = CryptoJS.AES.decrypt(encryptedData, key);
-            return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-        } catch (error) {
-            console.error('Decryption error:', error);
-            throw new Error('Failed to decrypt data');
-        }
-    }
-};
-
-// Modified encryption setup function
-function setupEncryption() {
-    return new Promise((resolve) => {
-        const modal = document.createElement('div');
-        modal.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        `;
-
-        const content = document.createElement('div');
-        content.style.cssText = `
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 400px;
-            width: 90%;
-        `;
-
-        content.innerHTML = `
-            <h3>Set Up Encryption</h3>
-            <p>Enter an encryption key for your notes. This key will be required to read your notes. 
-               Please store it safely - if you lose it, you won't be able to recover your notes!</p>
-            <input type="password" id="encryptionKey" placeholder="Enter encryption key" style="width: 100%; margin: 10px 0;">
-            <input type="password" id="confirmEncryptionKey" placeholder="Confirm encryption key" style="width: 100%; margin: 10px 0;">
-            <div style="display: flex; justify-content: space-between; margin-top: 15px;">
-                <button id="cancelEncryption">Skip Encryption</button>
-                <button id="confirmEncryptionSetup">Set Encryption Key</button>
-            </div>
-        `;
-
-        modal.appendChild(content);
-        document.body.appendChild(modal);
-
-        document.getElementById('cancelEncryption').onclick = () => {
-            document.body.removeChild(modal);
-            resolve(null);
-        };
-
-        document.getElementById('confirmEncryptionSetup').onclick = () => {
-            // Inside the confirmEncryptionSetup onclick handler, after generating the salt:
-            const testValue = "test";
-            const encryptedTest = encryptionUtils.encrypt(testValue, derivedKey);
-
-            // Store both the salt and the test value
-            db.collection('users').doc(currentUser.uid).set({
-                encryptionSalt: salt,
-                testEncrypted: encryptedTest
-            }, { merge: true });
-
-            const key = document.getElementById('encryptionKey').value;
-            const confirmKey = document.getElementById('confirmEncryptionKey').value;
-
-            if (!key) {
-                alert('Please enter an encryption key');
-                return;
-            }
-
-            if (key !== confirmKey) {
-                alert('Encryption keys do not match');
-                return;
-            }
-
-            if (key.length < 8) {
-                alert('Encryption key must be at least 8 characters long');
-                return;
-            }
-
-            document.body.removeChild(modal);
-
-            // Generate a salt and derive the final encryption key
-            const salt = encryptionUtils.generateSalt();
-            const derivedKey = encryptionUtils.deriveKey(key, salt);
-
-            // Store the salt in the user's profile
-            db.collection('users').doc(currentUser.uid).set({
-                encryptionSalt: salt
-            }, { merge: true });
-
-            resolve(derivedKey);
-        };
-    });
-}
 document.addEventListener('DOMContentLoaded', initializeApp);
