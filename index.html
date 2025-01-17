@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Note-Taking App</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div id="app">
         <header>
@@ -23,6 +25,12 @@
             <section id="noteContent">
                 <div id="noteMetadata">
                     <!-- Metadata will be displayed here -->
+                </div>
+                <div class="bulk-actions">
+                    <button id="deleteSelectedBtn">Delete Selected</button>
+                    <button id="deleteAllBtn">Delete All</button>
+                    <button id="readSelectedBtn">Read Selected</button>
+                    <span id="selectedCount"></span>
                 </div>
                 <div id="noteEditor">
                     <input type="text" id="noteTitle" placeholder="Note Title">
@@ -72,5 +80,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
     <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </body>
+
 </html>
