@@ -42,6 +42,7 @@ document.getElementById('loginBtn').addEventListener('click', login);
 document.getElementById('signupBtn').addEventListener('click', signup);
 document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
 document.getElementById('deleteAccountBtn').addEventListener('click', deleteAccount);
+document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
 document.getElementById('closeSettingsBtn').addEventListener('click', function () {
     document.getElementById('settingsModal').style.display = 'none';
 });
@@ -614,19 +615,12 @@ function openSettings() {
 }
 
 function saveSettings() {
-    const bgColor = document.getElementById('bgColor').value;
-    const fontColor = document.getElementById('fontColor').value;
     const fontStyle = document.getElementById('fontStyle').value;
-    const textToSpeech = document.getElementById('textToSpeech').checked;
-
-    document.body.style.backgroundColor = bgColor;
-    document.body.style.color = fontColor;
     document.body.style.fontFamily = fontStyle;
-    document.getElementById('textToSpeechBtn').style.display = textToSpeech ? 'inline-block' : 'none';
 
     // Save settings to user's profile in Firebase
     db.collection('users').doc(currentUser.uid).set({
-        settings: { bgColor, fontColor, fontStyle, textToSpeech }
+        settings: { fontStyle }
     }, { merge: true })
         .then(() => {
             alert('Settings saved successfully');
@@ -637,7 +631,6 @@ function saveSettings() {
             alert('Failed to save settings');
         });
 }
-
 function deleteAccount() {
     if (!confirm('Are you sure you want to delete your account? This action cannot be undone.')) return;
 
@@ -730,5 +723,6 @@ function initializeApp() {
         showLoginModal();
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', initializeApp);

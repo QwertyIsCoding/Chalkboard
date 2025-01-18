@@ -64,26 +64,27 @@
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <h2>Settings</h2>
+            
             <button class="close-modal" id="closeSettingsBtn">&times;</button>
+            <!--
             <label for="bgColor" style="color: white;">Background Color:</label>
             <input type="color" id="bgColor">
             <label for="fontColor" style="color: white;">Font Color:</label>
             <input type="color" id="fontColor">
+            -->
             <label for="fontStyle" style="color: white;">Font Style:</label>
             <select id="fontStyle">
-                <option value="Arial, sans-serif">Arial</option>
-                <option value="Times New Roman, serif">Times New Roman</option>
-                <option value="Courier New, monospace">Courier New</option>
-                <option value="Georgia, serif">Georgia</option>
-                <option value="Verdana, sans-serif">Verdana</option>
-                <option value="Roboto, sans-serif">Roboto</option>
-                <option value="Open Sans, sans-serif">Open Sans</option>
-                <option value="Montserrat, sans-serif">Montserrat</option>
-                <option value="Playfair Display, serif">Playfair Display</option>
+                <option value="Arial, sans-serif" stye="fontStyle:Arial">Arial</option>
+                <option value="Times New Roman, serif" stye="fontStyle:Arial">Times New Roman</option>
+                <option value="Courier New, monospace" stye="fontStyle:Courier">Courier New</option>
+                <option value="Georgia, serif" stye="fontStyle:Georgia">Georgia</option>
+                <option value="Verdana, sans-serif" stye="fontStyle:Verdana">Verdana</option>
+                <option value="Roboto, sans-serif" stye="fontStyle:Roboto">Roboto</option>
+                <option value="Open Sans, sans-serif" stye="fontStyle:Arial">Open Sans</option>
+                <option value="Montserrat, sans-serif" stye="fontStyle:Arial">Montserrat</option>
+                <option value="Playfair Display, serif" stye="fontStyle:Arial">Playfair Display</option>
+                <option type="checkbox" id="textToSpeech" style="color: white"> Enable TTS</option>
             </select>
-            <label for="textToSpeech">
-                <input type="checkbox" id="textToSpeech" style="color: white"> Enable Text-to-Speech </label>
-            </label>
             <button id="saveSettingsBtn">Save Settings</button>
             <button id="deleteAccountBtn">Delete Account</button>
         </div>
@@ -95,7 +96,7 @@
     
     <script src="script.js"></script>
 
-
+    <!--
     <script src="Backend/authentication.js"></script>
     <script src="Events/buttonHandling.js"></script>
     <script src="Events/noteManagement.js"></script>
@@ -103,7 +104,10 @@
     <script src="Featureset/readText.js"></script>
     <script src="Featureset/exportAs.js"></script>
     <script src="Backend/acountManagement.js"></script>
+    -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 </body>
 
 </html>
