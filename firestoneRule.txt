@@ -1,13 +1,24 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Ensure the user is authenticated
+    // Helper function to check if the user is authenticated
     function isAuthenticated() {
       return request.auth != null;
     }
 
+    // Allow read access to all authenticated users
     match /{document=**} {
-      allow read, write: if isAuthenticated();
+      allow read: if isAuthenticated();
+    }
+
+    // Allow write access to authenticated users, but only to their own user document
+    match /users/{userId} {
+      allow write: if isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Allow create access to the users collection for new sign-ups
+    match /users/{userId} {
+      allow create: if isAuthenticated();
     }
   }
 }
