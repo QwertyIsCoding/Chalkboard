@@ -1,2 +1,2 @@
 # Chalkboard
-My entry for the Dev.to hackathon
+This is a submission for the GitHub Copilot Challenge : New Beginnings
