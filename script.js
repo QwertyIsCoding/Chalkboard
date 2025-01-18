@@ -33,8 +33,8 @@ document.getElementById('createNoteBtn').addEventListener('click', createNote);
 document.getElementById('saveNoteBtn').addEventListener('click', saveNote);
 document.getElementById('deleteNoteBtn').addEventListener('click', deleteNote);
 document.getElementById('exportNoteBtn').addEventListener('click', exportNote);
-document.getElementById('shareNoteBtn').addEventListener('click', shareNote);
-document.getElementById('syncNoteBtn').addEventListener('click', syncNote);
+// document.getElementById('shareNoteBtn').addEventListener('click', shareNote);
+//document.getElementById('syncNoteBtn').addEventListener('click', syncNote);
 document.getElementById('textToSpeechBtn').addEventListener('click', readNoteAloud);
 document.getElementById('settingsBtn').addEventListener('click', openSettings);
 document.getElementById('logoutBtn').addEventListener('click', logout);
@@ -425,14 +425,14 @@ function displayNote(note) {
     const updatedDate = note.updatedAt ? note.updatedAt.toDate().toLocaleString() : 'Unknown';
 
     noteMetadata.textContent = `Created: ${createdDate} | Updated: ${updatedDate} | Author: ${note.author}`;
-    document.getElementById('syncNoteBtn').style.display = note.shared ? 'inline-block' : 'none';
+    // document.getElementById('syncNoteBtn').style.display = note.shared ? 'inline-block' : 'none';
 }
 
 function clearNoteDisplay() {
     noteTitle.value = '';
     noteBody.value = '';
     noteMetadata.textContent = '';
-    document.getElementById('syncNoteBtn').style.display = 'none';
+   // document.getElementById('syncNoteBtn').style.display = 'none';
 }
 
 // Rest of the functions remain the same...
@@ -440,7 +440,7 @@ function clearNoteDisplay() {
     noteTitle.value = '';
     noteBody.value = '';
     noteMetadata.textContent = '';
-    document.getElementById('syncNoteBtn').style.display = 'none';
+  //  document.getElementById('syncNoteBtn').style.display = 'none';
     showLogo();
 }
 // Advanced features
@@ -522,7 +522,7 @@ function shareNote() {
         .then(() => {
             currentNote.shared = true;
             currentNote.shareCode = shareCode;
-            document.getElementById('syncNoteBtn').style.display = 'inline-block';
+          //  document.getElementById('syncNoteBtn').style.display = 'inline-block';
             alert(`Share this code with others: ${shareCode}\nThey can access this note using the code.`);
         })
         .catch((error) => {
@@ -684,13 +684,13 @@ function closeCurrentNote(isSecond = false) {
         document.getElementById('secondNoteTitle').value = '';
         document.getElementById('secondNoteBody').value = '';
         document.getElementById('secondNoteMetadata').textContent = '';
-        document.getElementById('secondSyncNoteBtn').style.display = 'none';
+      //  document.getElementById('secondSyncNoteBtn').style.display = 'none';
     } else {
         currentNote = null;
         document.getElementById('noteTitle').value = '';
         document.getElementById('noteBody').value = '';
         document.getElementById('noteMetadata').textContent = '';
-        document.getElementById('syncNoteBtn').style.display = 'none';
+       // document.getElementById('syncNoteBtn').style.display = 'none';
     }
 
     if (!currentNote && !secondCurrentNote) {
