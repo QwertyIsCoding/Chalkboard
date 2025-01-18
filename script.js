@@ -657,12 +657,9 @@ function deleteAccount() {
         });
 }
 
-// Encryption functions
+// Encryption functions -- it prompted before but removed now -- redundant code
 function setupEncryption() {
-    encryptionKey = prompt('Enter a key for encrypting your notes. Keep this safe!');
-    if (!encryptionKey) {
-        alert('Encryption not set up. Your notes will not be encrypted.');
-    }
+    return;
 }
 
 function encryptData(data) {
