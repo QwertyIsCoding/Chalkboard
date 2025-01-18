@@ -1,24 +1,29 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Helper function to check if the user is authenticated
-    function isAuthenticated() {
-      return request.auth != null;
+    match /notes/{noteId} {
+      // Allow read only if the user is authenticated and is the author
+      allow read: if request.auth != null && 
+                 resource.data.author == request.auth.token.email;
+      
+      // Allow create if user is authenticated and sets themselves as author
+      allow create: if request.auth != null && 
+                   request.resource.data.author == request.auth.token.email;
+      
+      // Allow update if user is authenticated and is the author
+      allow update: if request.auth != null && 
+                   resource.data.author == request.auth.token.email &&
+                   request.resource.data.author == request.resource.data.author;
+      
+      // Allow delete if user is authenticated and is the author
+      allow delete: if request.auth != null && 
+                   resource.data.author == request.auth.token.email;
     }
 
-    // Allow read access to all authenticated users
-    match /{document=**} {
-      allow read: if isAuthenticated();
-    }
-
-    // Allow write access to authenticated users, but only to their own user document
+    // Add rules for user settings
     match /users/{userId} {
-      allow write: if isAuthenticated() && request.auth.uid == userId;
-    }
-
-    // Allow create access to the users collection for new sign-ups
-    match /users/{userId} {
-      allow create: if isAuthenticated();
+      allow read, write: if request.auth != null && 
+                           request.auth.uid == userId;
     }
   }
 }
