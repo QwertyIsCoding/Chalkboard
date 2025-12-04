@@ -9,7 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown.min.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 </head>
@@ -229,11 +230,11 @@
                 </div>
 
                 <!-- README Button for Implementation -->
-                <!-- <div class="readme-section">
-                    <button class="btn-primary readme-btn" onclick="openReadmeModal('implementation')">
+                <div class="readme-section">
+                    <button class="btn" data-readme-type="implementation" type="button">
                         <span class="material-icons">description</span> View Implementation README
                     </button>
-                </div> -->
+                </div>
 
                 <div class="code-preview" id="codePreview">
                     <div class="code-header">
@@ -331,13 +332,13 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- README Button for Program Architecture -->
-                <!-- <div class="readme-section">
-                    <button class="btn-primary readme-btn" onclick="openReadmeModal('program')">
+                <div class="readme-section">
+                    <button class="btn readme-btn" id="open-program-readme" type="button">
                         <span class="material-icons">description</span> View Program Architecture README
                     </button>
-                </div> -->
+                </div>
+                <div id="program-doc-content" class="markdown-body" style="margin: 1rem auto; max-width: 800px; background-color: black; color: white; display: none;"></div>
             </section>
 
             <!-- UI & Styling Section -->
@@ -429,12 +430,18 @@
                 </div>
 
                 <!-- README Button for UI & Styling -->
-                <!-- <div class="readme-section">
-                    <button class="btn-primary readme-btn" onclick="openReadmeModal('ui')">
+                <div class="readme-section">
+                    <button class="btn readme-btn" id="open-ui-readme" type="button">
                         <span class="material-icons">description</span> View UI & Styling README
                     </button>
-                </div> -->
+                </div>
+                <div id="ui-doc-content" class="markdown-body" style="margin: 1rem auto; max-width: 800px; background-color: black; color: white; display: none;"></div>
             </section>
+
+            <!-- Shared README render area -->
+            <div id="doc-content" class="markdown-body"
+                style="margin: 1rem auto; max-width: 800px; background-color: black; color: white; display: none;">
+            </div>
         </main>
     </div>
 
@@ -447,11 +454,6 @@
         </footer>
     </center>
     <br><br><br>
-    <center>
-        <!-- <div class="buttons">
-            <button id="open-readme" class="btn" type="button">Open README</button>
-        </div> -->
-    </center>
     <!-- End Footer -->
 
     <!-- Demo Modal -->
@@ -463,73 +465,7 @@
         </div>
     </div>
 
-    <!-- README Modal -->
-    <!-- <div id="readmeModal" class="modal">
-        <div class="modal-content readme-content">
-            <div class="readme-header">
-                <h3><span class="material-icons">description</span> Project README</h3>
-                <div class="readme-actions">
-                    <button class="readme-btn" onclick="refreshReadme()">
-                        <span class="material-icons">refresh</span> Refresh
-                    </button>
-                    <button class="readme-btn" onclick="closeReadmeModal()">
-                        <span class="material-icons">close</span> Close
-                    </button>
-                </div>
-            </div>
-            <div class="readme-body">
-                <pre id="readmeContent" class="readme-text"></pre>
-            </div>
-        </div>
-    </div> -->
-
-    <!-- README render area -->
-    <!-- <div id="doc-content" class="markdown-body" style="margin: 1rem auto; max-width: 800px; background-color: black; color: white; display: none;"></div>
-    <script>
-        (function () {
-            const btn = document.getElementById('open-readme');
-            const container = document.getElementById('doc-content');
-
-            async function fetchReadme() {
-                // Try common filename variants
-                const names = ['README.md', 'Readme.md', 'readme.md'];
-                let text = null;
-                for (const name of names) {
-                    try {
-                        const res = await fetch(name);
-                        if (!res.ok) continue;
-                        text = await res.text();
-                        break;
-                    } catch (e) {
-                        // continue to next variant
-                    }
-                }
-                return text;
-            }
-
-            async function showReadme() {
-                btn.disabled = true;
-                btn.textContent = 'Loading...';
-                const md = await fetchReadme();
-                if (!md) {
-                    btn.disabled = false;
-                    btn.textContent = 'Open README';
-                    container.style.display = 'block';
-                    container.innerHTML = '<p><em>Unable to load README.md. Ensure the file is available and served by your web server.</em></p>';
-                    return;
-                }
-                // Convert markdown -> HTML, sanitize, and insert
-                const html = marked.parse(md);
-                container.innerHTML = DOMPurify.sanitize(html);
-                container.style.display = 'block';
-                btn.textContent = 'Refresh README';
-                btn.disabled = false;
-            }
-
-            btn.addEventListener('click', showReadme);
-        })();
-    </script> -->
-
+    <script src="readme-handler.js"></script>
     <script src="script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
     <script

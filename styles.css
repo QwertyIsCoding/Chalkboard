@@ -1057,6 +1057,38 @@ main {
     border: 1px solid #333;
 }
 
+.readme-section .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem; /* Space between icon and text */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.readme-section .btn .material-icons {
+    font-size: 1.2rem; /* Adjust icon size */
+    vertical-align: middle; /* Ensure alignment with text */
+}
+
+.readme-section .btn:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.readme-section .btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
 /* Info Page Specific Styles */
 .llm-section, .project-info, .development-info {
     margin: 3rem 0;

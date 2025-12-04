@@ -3,45 +3,23 @@
  * Interactive navigation and functionality for the documentation site
  */
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initializeDocumentationSite();
 
-    // Ensure README button functionality is initialized
-    const btn = document.getElementById('open-readme');
-    if (btn) {
-        btn.addEventListener('click', async function() {
-            const container = document.getElementById('doc-content');
-            btn.disabled = true;
-            btn.textContent = 'Loading...';
-            const md = await fetchReadme();
-            if (!md) {
-                btn.disabled = false;
-                btn.textContent = 'Open README';
-                container.style.display = 'block';
-                container.innerHTML = '<p><em>Unable to load README.md. Ensure the file is available and served by your web server.</em></p>';
-                return;
-            }
-            const html = marked.parse(md);
-            container.innerHTML = DOMPurify.sanitize(html);
-            container.style.display = 'block';
-            btn.textContent = 'Refresh README';
-            btn.disabled = false;
-        });
-    }
-});
+    // Setup README handling for Program Architecture
+    setupReadmeButton(
+        'open-program-readme',
+        'program-doc-content',
+        'Documentation/PROGRAM.md'
+    );
 
-async function fetchReadme() {
-    const names = ['README.md', 'Readme.md', 'readme.md'];
-    for (const name of names) {
-        try {
-            const res = await fetch(name);
-            if (res.ok) return await res.text();
-        } catch (e) {
-            // Continue to next variant
-        }
-    }
-    return null;
-}
+    // Setup README handling for UI & Styling
+    setupReadmeButton(
+        'open-ui-readme',
+        'ui-doc-content',
+        'Documentation/UI.md'
+    );
+});
 
 /**
  * Initialize the documentation site functionality
@@ -831,12 +809,222 @@ function throttle(func, limit) {
     };
 }
 
+/**
+ * Setup a README button and its rendering space
+ * @param {string} buttonId - The ID of the button
+ * @param {string} contentId - The ID of the rendering space
+ * @param {string} filePath - The path to the README file
+ */
+function setupReadmeButton(buttonId, contentId, filePath) {
+    const button = document.getElementById(buttonId);
+    const content = document.getElementById(contentId);
+
+    if (!button || !content) {
+        console.error(`Button or content not found for ${buttonId}`);
+        return;
+    }
+
+    button.addEventListener('click', async function () {
+        if (content.style.display === 'block') {
+            content.style.display = 'none';
+            button.textContent = 'View README';
+        } else {
+            button.disabled = true;
+            button.textContent = 'Loading...';
+            try {
+                const response = await fetch(filePath);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch ${filePath}`);
+                }
+                const markdown = await response.text();
+                const html = marked.parse(markdown);
+                content.innerHTML = DOMPurify.sanitize(html);
+                content.style.display = 'block';
+                button.textContent = 'Hide README';
+            } catch (error) {
+                console.error(error);
+                content.innerHTML = '<p><em>Error loading README. Please try again.</em></p>';
+                content.style.display = 'block';
+                button.textContent = 'View README';
+            } finally {
+                button.disabled = false;
+            }
+        }
+    });
+}
+
 window.copyCodeToClipboard = copyCodeToClipboard;
 
-// Export functions for global access
-window.openReadmeModal = openReadmeModal;
-window.closeReadmeModal = closeReadmeModal;
-window.refreshReadme = refreshReadme;
+/**
+ * Enhanced README functionality that handles multiple buttons
+ * Supports different documentation files based on button context
+ * Includes close functionality with button state management
+ */
+(function () {
+    // Get all README buttons (both top-level and section-level)
+    const readmeButtons = document.querySelectorAll('#open-readme');
+    const container = document.getElementById('doc-content');
+
+    if (!container || readmeButtons.length === 0) {
+        console.log('README elements not found, skipping enhanced README functionality');
+        return;
+    }
+
+    // State management for multiple buttons
+    let isReadmeVisible = false;
+    let currentButton = null;
+    let currentFile = 'PROGRAM.md';
+    let currentOriginalText = '';
+
+    // Specific fetch functions for each documentation type
+    async function fetchImplementationReadme() {
+        try {
+            const res = await fetch('Documentation/IMPLEMENTATION.md');
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return await res.text();
+        } catch (e) {
+            console.error('Failed to fetch IMPLEMENTATION.md:', e);
+            return null;
+        }
+    }
+
+    async function fetchProgramReadme() {
+        try {
+            const res = await fetch('Documentation/PROGRAM.md');
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return await res.text();
+        } catch (e) {
+            console.error('Failed to fetch PROGRAM.md:', e);
+            return null;
+        }
+    }
+
+    async function fetchUIReadme() {
+        try {
+            const res = await fetch('Documentation/UI.md');
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return await res.text();
+        } catch (e) {
+            console.error('Failed to fetch UI.md:', e);
+            return null;
+        }
+    }
+
+    // File mapping based on button text or context
+    function getReadmeFile(button) {
+        const buttonText = button.textContent.toLowerCase();
+        
+        // Check for specific section buttons
+        if (buttonText.includes('implementation')) {
+            return 'implementation';
+        } else if (buttonText.includes('program') || buttonText.includes('architecture')) {
+            return 'program';
+        } else if (buttonText.includes('ui') || buttonText.includes('styling')) {
+            return 'ui';
+        }
+        
+        // Default fallback
+        return 'program';
+    }
+
+    async function fetchReadme(fileType) {
+        switch (fileType) {
+            case 'implementation':
+                return await fetchImplementationReadme();
+            case 'program':
+                return await fetchProgramReadme();
+            case 'ui':
+                return await fetchUIReadme();
+            default:
+                return await fetchProgramReadme();
+        }
+    }
+
+    function showReadme(button) {
+        if (isReadmeVisible && currentButton === button) {
+            // Close README (same button)
+            closeReadme();
+        } else if (isReadmeVisible && currentButton !== button) {
+            // Switch to different README (different button)
+            closeReadme();
+            setTimeout(() => openReadme(button), 100);
+        } else {
+            // Open README
+            openReadme(button);
+        }
+    }
+
+    async function openReadme(button) {
+        if (!button) return;
+        
+        // Set current context
+        currentButton = button;
+        currentFile = getReadmeFile(button);
+        currentOriginalText = button.textContent;
+        
+        // Disable button and show loading
+        button.disabled = true;
+        button.textContent = 'Loading...';
+        
+        try {
+            const md = await fetchReadme(currentFile);
+            
+            if (!md) {
+                button.disabled = false;
+                button.textContent = currentOriginalText;
+                container.style.display = 'block';
+                container.innerHTML = `<p><em>Unable to load ${currentFile}. Ensure the file is available and served by your web server.</em></p>`;
+                return;
+            }
+            
+            // Convert markdown -> HTML, sanitize, and insert
+            const html = marked.parse(md);
+            container.innerHTML = DOMPurify.sanitize(html);
+            container.style.display = 'block';
+            
+            // Update state and button
+            isReadmeVisible = true;
+            button.textContent = 'Hide README';
+            button.disabled = false;
+            
+        } catch (error) {
+            console.error('Error loading README:', error);
+            button.disabled = false;
+            button.textContent = currentOriginalText;
+            container.innerHTML = '<p><em>Error loading documentation. Please try again.</em></p>';
+            container.style.display = 'block';
+        }
+    }
+
+    function closeReadme() {
+        if (!currentButton) return;
+        
+        // Hide the container
+        container.style.display = 'none';
+        
+        // Update state and button
+        isReadmeVisible = false;
+        currentButton.textContent = currentOriginalText;
+        currentButton = null;
+    }
+
+    // Set up event listeners for all README buttons
+    readmeButtons.forEach(button => {
+        // Store original text
+        button.dataset.originalText = button.textContent;
+        
+        // Remove any existing listeners and add enhanced version
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+        
+        // Add click event listener
+        newButton.addEventListener('click', () => showReadme(newButton));
+        
+        console.log(`Enhanced README functionality set up for button: "${newButton.textContent}"`);
+    });
+    
+    console.log(`Enhanced README functionality loaded - handling ${readmeButtons.length} buttons with context-aware file loading`);
+})();
 
 // Export functions for global access
 window.showSection = showSection;
@@ -845,6 +1033,3 @@ window.closeCodePreview = closeCodePreview;
 window.showDemoModal = showDemoModal;
 window.hideDemoModal = hideDemoModal;
 window.copyCodeToClipboard = copyCodeToClipboard;
-window.openReadmeModal = openReadmeModal;
-window.closeReadmeModal = closeReadmeModal;
-window.refreshReadme = refreshReadme;
