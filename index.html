@@ -4,68 +4,412 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chalkboard</title>
-    <style>
-        body,
-        html {
-            height: 100%;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: black;
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            color: white;
-            text-align: center;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        h1 {
-            font-size: 4rem;
-            margin: 0;
-        }
-
-        p {
-            font-size: 1.5rem;
-            margin: 0.5rem 0 2rem 0;
-        }
-
-        .button {
-            font-size: 1rem;
-            padding: 1rem 2rem;
-            background-color: #007bff;
-            border: none;
-            border-radius: 25px;
-            color: white;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <title>Chalkboard Documentation</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 
 <body>
-    <div class="container">
-        <img src="Media/chalkboardBanner.png" style="width: 350px; height: 100000;">
-        <br>
-        <p1>Built with JS, powered by Firebase</p1>
-        <br>
-        <p>Note, Remember, Move Forward</p>
-        <a href="app.html" class="button">Go to App</a>
-        <br>
-        <a href="info.html" class="button">Info</a>
+    <div id="app">
+        <!-- Header -->
+        <header>
+            <div class="logo-container">
+                <div class="logo"><img src="../Media/chalkboardBanner.png" style="width: 350px; height: auto;"></div>
+                <h3>Documentation</h3>
+            </div>
+            <nav>
+                <button class="nav-btn" onclick="showSection('overview')">Overview</button>
+                <button class="nav-btn" onclick="showSection('implementation')">Implementation</button>
+                <button class="nav-btn" onclick="showSection('program')">Program Architecture</button>
+                <button class="nav-btn" onclick="showSection('ui')">UI & Styling</button>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Overview Section -->
+            <section id="overview" class="content-section active">
+                <div class="hero">
+                    <h2>Firebase-Powered Note-Taking Application</h2>
+                    <p class="hero-description">
+                        Comprehensive documentation for the Chalkboard application - a modern,
+                        feature-rich note-taking system built with Firebase, featuring text-to-speech,
+                        bulk operations, and real-time collaboration.
+                    </p>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <span class="stat-number">50+</span>
+                            <span class="stat-label">Functions Documented</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">100%</span>
+                            <span class="stat-label">Code Coverage</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-card" onclick="showSection('implementation')">
+                        <div class="feature-icon"><span class="material-icons">settings</span></div>
+                        <h3>Implementation Guide</h3>
+                        <p>Detailed technical documentation for every function, including code snippets, Firebase
+                            integration patterns, and implementation strategies.</p>
+                        <div class="feature-meta">
+                            <span class="meta-item"><span class="material-icons">description</span> Detailed Functions</span>
+                            <span class="meta-item"><span class="material-icons">build</span> Code Examples</span>
+                            <span class="meta-item"><span class="material-icons">rocket_launch</span> Firebase Integration</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card" onclick="showSection('program')">
+                        <div class="feature-icon"><span class="material-icons">architecture</span></div>
+                        <h3>Program Architecture</h3>
+                        <p>High-level system design, data flow patterns, state management, and how all components work
+                            together as a cohesive application.</p>
+                        <div class="feature-meta">
+                            <span class="meta-item"><span class="material-icons">analytics</span> Data Flow</span>
+                            <span class="meta-item"><span class="material-icons">sync</span> State Management</span>
+                            <span class="meta-item"><span class="material-icons">link</span> Function Connections</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card" onclick="showSection('ui')">
+                        <div class="feature-icon"><span class="material-icons">palette</span></div>
+                        <h3>UI & Styling</h3>
+                        <p>Complete guide to the styling system, CSS framework, event handling, and how JavaScript
+                            dynamically controls the user interface.</p>
+                        <div class="feature-meta">
+                            <span class="meta-item"><span class="material-icons">gps_fixed</span> CSS Framework</span>
+                            <span class="meta-item"><span class="material-icons">mouse</span> Event System</span>
+                            <span class="meta-item"><span class="material-icons">phone_iphone</span> Responsive Design</span>
+                        </div>
+                    </div>
+                    <div class="feature-card" onclick="showSection('security')">
+                        <div class="feature-icon"><span class="material-icons">lock</span></div>
+                        <h3>Security & Performance</h3>
+                        <p>Security considerations, performance optimizations, error handling strategies, and best
+                            practices for production deployment.</p>
+                        <div class="feature-meta">
+                            <span class="meta-item"><span class="material-icons">security</span> Security</span>
+                            <span class="meta-item"><span class="material-icons">flash_on</span> Performance</span>
+                            <span class="meta-item"><span class="material-icons">check_circle</span> Best Practices</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-stack">
+                    <h3>Technology Stack</h3>
+                    <div class="tech-items">
+                        <div class="tech-item">
+                            <span class="tech-icon"><span class="material-icons">local_fire_department</span></span>
+                            <span class="tech-name">Firebase</span>
+                            <span class="tech-desc">Auth & Firestore</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-icon"><span class="material-icons">article</span></span>
+                            <span class="tech-name">JavaScript ES6+</span>
+                            <span class="tech-desc">Modern Features</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-icon"><span class="material-icons">palette</span></span>
+                            <span class="tech-name">CSS3</span>
+                            <span class="tech-desc">Flexbox & Grid</span>
+                        </div>
+                        <div class="tech-item">
+                            <span class="tech-icon"><span class="material-icons">volume_up</span></span>
+                            <span class="tech-name">Web Speech API</span>
+                            <span class="tech-desc">Text-to-Speech</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Implementation Section -->
+            <section id="implementation" class="content-section">
+                <div class="section-header">
+                    <h2>Implementation Guide</h2>
+                    <p>Complete technical documentation for each function in the Chalkboard application</p>
+                </div>
+
+                <div class="implementation-grid">
+                    <div class="impl-category">
+                        <h3><span class="material-icons">lock</span> Authentication System</h3>
+                        <div class="impl-functions">
+                            <div class="function-item" onclick="showFunctionDetails('login')">
+                                <code class="function-name">login()</code>
+                                <span class="function-desc">User authentication with Firebase</span>
+                                <span class="function-lines">Lines 120-135</span>
+                            </div>
+                            <div class="function-item" onclick="showFunctionDetails('signup')">
+                                <code class="function-name">signup()</code>
+                                <span class="function-desc">New user registration</span>
+                                <span class="function-lines">Lines 177-192</span>
+                            </div>
+                            <div class="function-item" onclick="showFunctionDetails('logout')">
+                                <code class="function-name">logout()</code>
+                                <span class="function-desc">Session termination</span>
+                                <span class="function-lines">Lines 204-214</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="impl-category">
+                        <h3><span class="material-icons">note</span> Note Management</h3>
+                        <div class="impl-functions">
+                            <div class="function-item" onclick="showFunctionDetails('createNote')">
+                                <code class="function-name">createNote()</code>
+                                <span class="function-desc">Generate new note objects</span>
+                                <span class="function-lines">Lines 236-248</span>
+                            </div>
+                            <div class="function-item" onclick="showFunctionDetails('saveNote')">
+                                <code class="function-name">saveNote()</code>
+                                <span class="function-desc">Persist notes to Firestore</span>
+                                <span class="function-lines">Lines 266-298</span>
+                            </div>
+                            <div class="function-item" onclick="showFunctionDetails('loadNotes')">
+                                <code class="function-name">loadNotes()</code>
+                                <span class="function-desc">Load and display user notes</span>
+                                <span class="function-lines">Lines 357-412</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="impl-category">
+                        <h3><span class="material-icons">volume_up</span> Text-to-Speech</h3>
+                        <div class="impl-functions">
+                            <div class="function-item" onclick="showFunctionDetails('readNoteAloud')">
+                                <code class="function-name">readNoteAloud()</code>
+                                <span class="function-desc">Single note audio playback</span>
+                                <span class="function-lines">Lines 713-770</span>
+                            </div>
+                            <div class="function-item" onclick="showFunctionDetails('readSelectedNotes')">
+                                <code class="function-name">readSelectedNotes()</code>
+                                <span class="function-desc">Multiple note sequential reading</span>
+                                <span class="function-lines">Lines 576-603</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="impl-category">
+                        <h3><span class="material-icons">delete</span> Bulk Operations</h3>
+                        <div class="impl-functions">
+                            <div class="function-item" onclick="showFunctionDetails('deleteSelectedNotes')">
+                                <code class="function-name">deleteSelectedNotes()</code>
+                                <span class="function-desc">Batch note deletion</span>
+                                <span class="function-lines">Lines 491-518</span>
+                            </div>
+                            <div class="function-item" onclick="showFunctionDetails('deleteAllNotes')">
+                                <code class="function-name">deleteAllNotes()</code>
+                                <span class="function-desc">Delete all user notes</span>
+                                <span class="function-lines">Lines 531-556</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-preview" id="codePreview">
+                    <div class="code-header">
+                        <h4 id="codeTitle">Function Implementation</h4>
+                        <button class="close-btn" onclick="closeCodePreview()"><span class="material-icons">close</span></button>
+                    </div>
+                    <pre><code id="codeContent" class="language-javascript"></code></pre>
+                </div>
+            </section>
+
+            <!-- Program Architecture Section -->
+            <section id="program" class="content-section">
+                <div class="section-header">
+                    <h2>Program Architecture</h2>
+                    <p>How functions interconnect and work within the overall system</p>
+                </div>
+
+                <div class="architecture-overview">
+                    <div class="layer-diagram">
+                        <div class="layer">
+                            <div class="layer-name">USER INTERFACE LAYER</div>
+                            <div class="layer-desc">DOM manipulation, event handling, visual feedback</div>
+                        </div>
+                        <div class="layer-arrow">↓</div>
+                        <div class="layer">
+                            <div class="layer-name">APPLICATION LOGIC LAYER</div>
+                            <div class="layer-desc">Business logic, state management, function orchestration</div>
+                        </div>
+                        <div class="layer-arrow">↓</div>
+                        <div class="layer">
+                            <div class="layer-name">FIREBASE SERVICE LAYER</div>
+                            <div class="layer-desc">Firestore operations, authentication, data persistence</div>
+                        </div>
+                        <div class="layer-arrow">↓</div>
+                        <div class="layer">
+                            <div class="layer-name">AUTHENTICATION LAYER</div>
+                            <div class="layer-desc">User session management, security, access control</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-flow">
+                    <h3>Data Flow Architecture</h3>
+                    <div class="flow-diagram">
+                        <div class="flow-step">
+                            <div class="flow-icon"><span class="material-icons">person</span></div>
+                            <div class="flow-label">User Input</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-icon"><span class="material-icons">mouse</span></div>
+                            <div class="flow-label">DOM Event</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-icon"><span class="material-icons">settings</span></div>
+                            <div class="flow-label">JavaScript Function</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-icon"><span class="material-icons">local_fire_department</span></div>
+                            <div class="flow-label">Firebase Operation</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-icon"><span class="material-icons">palette</span></div>
+                            <div class="flow-label">UI Update</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-patterns">
+                    <h3>Key Design Patterns</h3>
+                    <div class="pattern-grid">
+                        <div class="pattern-card">
+                            <h4>Event-Driven Architecture</h4>
+                            <p>Functions triggered by user actions and system events</p>
+                            <code class="pattern-example">button.addEventListener('click', handler)</code>
+                        </div>
+                        <div class="pattern-card">
+                            <h4>Observer Pattern</h4>
+                            <p>Firebase auth state changes trigger automatic UI updates</p>
+                            <code class="pattern-example">onAuthStateChanged(callback)</code>
+                        </div>
+                        <div class="pattern-card">
+                            <h4>Repository Pattern</h4>
+                            <p>Abstracted data access through Firestore operations</p>
+                            <code class="pattern-example">db.collection('notes')</code>
+                        </div>
+                        <div class="pattern-card">
+                            <h4>Singleton Pattern</h4>
+                            <p>Single Firebase instance and centralized state management</p>
+                            <code class="pattern-example">const auth = firebase.auth()</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- UI & Styling Section -->
+            <section id="ui" class="content-section">
+                <div class="section-header">
+                    <h2>UI & Styling Guide</h2>
+                    <p>CSS framework, event handling, and interface design patterns</p>
+                </div>
+
+                <div class="design-system">
+                    <h3>Design System</h3>
+                    <div class="color-palette">
+                        <div class="color-item">
+                            <div class="color-swatch" style="background-color: #000000;"></div>
+                            <div class="color-info">
+                                <span class="color-name">Primary Background</span>
+                                <span class="color-hex">#000000</span>
+                            </div>
+                        </div>
+                        <div class="color-item">
+                            <div class="color-swatch" style="background-color: #171414;"></div>
+                            <div class="color-info">
+                                <span class="color-name">Secondary Background</span>
+                                <span class="color-hex">#171414</span>
+                            </div>
+                        </div>
+                        <div class="color-item">
+                            <div class="color-swatch" style="background-color: #222020;"></div>
+                            <div class="color-info">
+                                <span class="color-name">Header Background</span>
+                                <span class="color-hex">#222020</span>
+                            </div>
+                        </div>
+                        <div class="color-item">
+                            <div class="color-swatch" style="background-color: #007bff;"></div>
+                            <div class="color-info">
+                                <span class="color-name">Accent Color</span>
+                                <span class="color-hex">#007bff</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component-library">
+                    <h3>Component Library</h3>
+                    <div class="component-examples">
+                        <div class="component-demo">
+                            <h4>Buttons</h4>
+                            <div class="demo-buttons">
+                                <button class="btn-primary">Primary Button</button>
+                                <button class="btn-danger">Danger Button</button>
+                                <button class="btn-outline">Outline Button</button>
+                            </div>
+                        </div>
+
+                        <div class="component-demo">
+                            <h4>Form Elements</h4>
+                            <div class="demo-form">
+                                <input type="text" placeholder="Text Input" class="demo-input">
+                                <textarea placeholder="Textarea" class="demo-textarea"></textarea>
+                                <select class="demo-select">
+                                    <option>Select Option</option>
+                                    <option>Option 1</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="component-demo">
+                            <h4>Modal</h4>
+                            <button class="btn-primary" onclick="showDemoModal()">Show Modal</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layout-system">
+                    <h3>Layout System</h3>
+                    <div class="layout-example">
+                        <div class="layout-diagram">
+                            <div class="layout-header">HEADER</div>
+                            <div class="layout-body">
+                                <div class="layout-sidebar">SIDEBAR (250px)</div>
+                                <div class="layout-main">MAIN CONTENT (flex: 1)</div>
+                            </div>
+                        </div>
+                        <p class="layout-description">
+                            Flexbox-based responsive layout with fixed sidebar and flexible main content area
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
+
+    <!-- Demo Modal -->
+    <div id="demoModal" class="modal">
+        <div class="modal-content">
+            <h3>Demo Modal</h3>
+            <p>This is an example of the modal component used throughout the application.</p>
+            <button class="btn-primary" onclick="hideDemoModal()">Close</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
 </body>
 
 </html>

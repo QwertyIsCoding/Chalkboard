@@ -1,106 +1,161 @@
-// Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyC2rV2E0BujE6b17pKbfGbN7jUPcKWMGak",
-    authDomain: "chalkboard-2d89c.firebaseapp.com",
-    projectId: "chalkboard-2d89c",
-    storageBucket: "chalkboard-2d89c.firebasestorage.app",
-    messagingSenderId: "416242146566",
-    appId: "1:416242146566:web:739d2ad2c3f4d8104a5287",
-    measurementId: "G-4EGX29H7WY"
-};
+/**
+ * Chalkboard Documentation Landing Page
+ * Interactive navigation and functionality for the documentation site
+ */
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-// DOM elements
-const loginModal = document.getElementById('loginModal');
-const settingsModal = document.getElementById('settingsModal');
-const noteList = document.getElementById('noteList');
-const noteContent = document.getElementById('noteContent');
-const noteTitle = document.getElementById('noteTitle');
-const noteBody = document.getElementById('noteBody');
-const noteMetadata = document.getElementById('noteMetadata');
-
-// Global variables
-let currentUser = null;
-let currentNote = null;
-let encryptionKey = null;
-
-// Event listeners
-document.getElementById('createNoteBtn').addEventListener('click', createNote);
-document.getElementById('saveNoteBtn').addEventListener('click', saveNote);
-document.getElementById('deleteNoteBtn').addEventListener('click', deleteNote);
-document.getElementById('exportNoteBtn').addEventListener('click', exportNote);
-// document.getElementById('shareNoteBtn').addEventListener('click', shareNote);
-//document.getElementById('syncNoteBtn').addEventListener('click', syncNote);
-document.getElementById('textToSpeechBtn').addEventListener('click', readNoteAloud);
-document.getElementById('settingsBtn').addEventListener('click', openSettings);
-document.getElementById('logoutBtn').addEventListener('click', logout);
-document.getElementById('loginBtn').addEventListener('click', login);
-document.getElementById('signupBtn').addEventListener('click', signup);
-document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
-document.getElementById('deleteAccountBtn').addEventListener('click', deleteAccount);
-document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
-document.getElementById('closeSettingsBtn').addEventListener('click', function () {
-    document.getElementById('settingsModal').style.display = 'none';
+document.addEventListener('DOMContentLoaded', function() {
+    initializeDocumentationSite();
 });
-// Add these global variables at the top with your other variables
-let selectedNotes = new Set();
-let isReadingAloud = false;
 
-// Add these new event listeners with your other event listeners
-document.getElementById('deleteSelectedBtn').addEventListener('click', deleteSelectedNotes);
-document.getElementById('deleteAllBtn').addEventListener('click', deleteAllNotes);
-document.getElementById('readSelectedBtn').addEventListener('click', readSelectedNotes);
-// Authentication functions
+/**
+ * Initialize the documentation site functionality
+ */
+function initializeDocumentationSite() {
+    // Set up navigation
+    setupNavigation();
+    
+    // Set up function details
+    setupFunctionDetails();
+    
+    // Set up modal functionality
+    setupModals();
+    
+    // Set up scroll effects
+    setupScrollEffects();
+    
+    // Initialize the first section
+    showSection('overview');
+}
+
+/**
+ * Set up navigation between sections
+ */
+function setupNavigation() {
+    // Navigation is handled by onclick handlers in HTML
+    // This function can be extended for keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        // Add keyboard shortcuts if needed
+        if (e.key === 'Escape') {
+            closeCodePreview();
+            hideDemoModal();
+        }
+    });
+}
+
+/**
+ * Show a specific documentation section
+ * @param {string} sectionId - The ID of the section to show
+ */
+function showSection(sectionId) {
+    // Hide all sections
+    const sections = document.querySelectorAll('.content-section');
+    sections.forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Remove active class from all nav buttons
+    const navBtns = document.querySelectorAll('.nav-btn');
+    navBtns.forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Show target section
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.classList.add('active');
+        
+        // Add active class to corresponding nav button
+        const activeBtn = document.querySelector(`[onclick="showSection('${sectionId}')"]`);
+        if (activeBtn) {
+            activeBtn.classList.add('active');
+        }
+        
+        // Scroll to top smoothly
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Close any open code preview
+        closeCodePreview();
+    }
+}
+
+/**
+ * Set up function details and code preview functionality
+ */
+function setupFunctionDetails() {
+    // Function code snippets for the code preview
+    window.functionCodeSnippets = {
+        'login': {
+            title: 'login() - User Authentication',
+            code: `/**
+ * Authenticate user with email and password
+ * @function login
+ * @param {string} username - User's email address
+ * @param {string} password - User's password
+ * @returns {Promise} Firebase authentication promise
+ * 
+ * Usage example:
+ * // Called when user clicks login button
+ * // Automatically loads user's notes on successful login
+ */
 function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
+    // Firebase authentication method for existing users
     auth.signInWithEmailAndPassword(username, password)
         .then((userCredential) => {
             currentUser = userCredential.user;
-            loginModal.style.display = 'none';
-            loadNotes();
+            loginModal.style.display = 'none';  // Hide login modal
+            loadNotes();                        // Load user's notes from Firestore
         })
         .catch((error) => {
             console.error('Login error:', error);
             alert('Login failed. Please check your credentials.');
         });
-}
-
-firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-        currentUser = user;
-        loadNotes();
-    } else {
-        currentUser = null;
-        showLoginModal();
-    }
-});
-
-function showLoginModal() {
-    loginModal.style.display = 'block';
-}
-
+}`
+        },
+        'signup': {
+            title: 'signup() - New User Registration',
+            code: `/**
+ * Create a new user account
+ * @function signup
+ * @param {string} username - User's email address for new account
+ * @param {string} password - User's chosen password
+ * @returns {Promise} Firebase authentication promise
+ * 
+ * Usage example:
+ * // Called when user clicks signup button
+ * // Sets up encryption and redirects to note creation
+ */
 function signup() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
+    // Firebase method to create new user account
     auth.createUserWithEmailAndPassword(username, password)
         .then((userCredential) => {
             currentUser = userCredential.user;
             loginModal.style.display = 'none';
-            setupEncryption();
+            setupEncryption();  // Initialize encryption for new user
         })
         .catch((error) => {
             console.error('Signup error:', error);
             alert('Signup failed. Please try again.');
         });
-}
-
+}`
+        },
+        'logout': {
+            title: 'logout() - Session Termination',
+            code: `/**
+ * Log out the current user and clean up session
+ * @function logout
+ * @returns {Promise} Firebase sign-out promise
+ * 
+ * Clears:
+ * - Current user from memory
+ * - Note display
+ * - Shows login modal
+ */
 function logout() {
     auth.signOut()
         .then(() => {
@@ -111,9 +166,26 @@ function logout() {
         .catch((error) => {
             console.error('Logout error:', error);
         });
-}
-
-// Note management functions
+}`
+        },
+        'createNote': {
+            title: 'createNote() - Generate New Note Objects',
+            code: `/**
+ * Create a new blank note
+ * @function createNote
+ * @returns {Object} Note object with initial properties
+ * 
+ * Creates a note object with:
+ * - Unique ID based on timestamp
+ * - Empty title and body
+ * - Current timestamp for created/updated
+ * - Current user's email as author
+ * - Default shared status as false
+ * 
+ * Usage example:
+ * // Called when user clicks "Create Note" button
+ * // Automatically displays the new note in the editor
+ */
 function createNote() {
     const now = firebase.firestore.Timestamp.now();
     currentNote = {
@@ -126,8 +198,26 @@ function createNote() {
         shared: false
     };
     displayNote(currentNote);
-}
-
+}`
+        },
+        'saveNote': {
+            title: 'saveNote() - Persist Notes to Firestore',
+            code: `/**
+ * Save current note to Firestore database
+ * @function saveNote
+ * @returns {Promise} Firestore document write promise
+ * 
+ * Process:
+ * 1. Validates user authentication and note existence
+ * 2. Encrypts content if encryption key is available
+ * 3. Updates timestamp
+ * 4. Saves to Firestore 'notes' collection
+ * 5. Refreshes note list display
+ * 
+ * Usage example:
+ * // Called when user clicks "Save Note" button
+ * // Handles both new notes and updates to existing notes
+ */
 function saveNote() {
     if (!currentUser || !currentNote) {
         alert('Please create a note first');
@@ -160,32 +250,28 @@ function saveNote() {
             console.error('Error saving note:', error);
             alert('Failed to save note. Please try again.');
         });
-}
-function deleteNote() {
-    if (!currentNote || !currentNote.id) {
-        alert('No note selected to delete');
-        return;
-    }
-
-    if (!confirm('Are you sure you want to delete this note? This action cannot be undone.')) {
-        return;
-    }
-
-    db.collection('notes')
-        .doc(currentNote.id)
-        .delete()
-        .then(() => {
-            alert('Note deleted successfully');
-            currentNote = null;
-            clearNoteDisplay();
-            loadNotes(); // Refresh the note list
-        })
-        .catch((error) => {
-            console.error('Error deleting note:', error);
-            alert('Failed to delete note. Please try again.');
-        });
-}
-
+}`
+        },
+        'loadNotes': {
+            title: 'loadNotes() - Load and Display User Notes',
+            code: `/**
+ * Load and display all notes for the current user
+ * @function loadNotes
+ * @returns {void}
+ * 
+ * Retrieves notes from Firestore filtered by:
+ * - Current user's email as author
+ * - Sorted by update timestamp (newest first)
+ * 
+ * Features:
+ * - Creates interactive note list with checkboxes
+ * - Handles bulk action button visibility
+ * - Updates selection count and highlighting
+ * 
+ * Usage example:
+ * // Called automatically on login and after note operations
+ * // Populates the sidebar note list
+ */
 function loadNotes() {
     if (!currentUser) return;
 
@@ -210,7 +296,7 @@ function loadNotes() {
                 noteElement.className = 'note-item';
                 noteElement.dataset.id = note.id;
 
-                // Add checkbox
+                // Add checkbox for bulk selection
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.className = 'note-checkbox';
@@ -241,40 +327,148 @@ function loadNotes() {
         .catch((error) => {
             console.error('Error loading notes:', error);
         });
-}
-
-// Add these new functions for handling selections
-function handleNoteSelection(noteId, isSelected) {
-    if (isSelected) {
-        selectedNotes.add(noteId);
-    } else {
-        selectedNotes.delete(noteId);
+}`
+        },
+        'readNoteAloud': {
+            title: 'readNoteAloud() - Single Note Audio Playback',
+            code: `/**
+ * Read the currently displayed note aloud
+ * @function readNoteAloud
+ * @returns {void}
+ * 
+ * Single-note version of text-to-speech functionality
+ * Creates a more conversational reading experience
+ * 
+ * Usage example:
+ * // Called when user clicks "Read Aloud" button for current note
+ */
+function readNoteAloud() {
+    if (!currentNote) {
+        alert('Please select a note to read');
+        return;
     }
-    updateSelectedCount();
-    highlightSelectedNotes();
-}
 
-function updateSelectedCount() {
-    const count = selectedNotes.size;
-    const selectedCount = document.getElementById('selectedCount');
-    selectedCount.textContent = count ? `${count} note(s) selected` : '';
-}
+    // Check if speech synthesis is supported
+    if (!window.speechSynthesis) {
+        alert('Text-to-speech is not supported in your browser');
+        return;
+    }
 
-function highlightSelectedNotes() {
-    document.querySelectorAll('.note-item').forEach(noteItem => {
-        const isSelected = selectedNotes.has(noteItem.dataset.id);
-        noteItem.classList.toggle('selected', isSelected);
-    });
-}
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
 
-// Add these new deletion functions
+    // Create speech content
+    const title = noteTitle.value || 'Untitled';
+    const body = noteBody.value || '';
+    const content = \`\${title}. \${body}\`;
+
+    // Create and configure speech utterance
+    const speech = new SpeechSynthesisUtterance(content);
+    speech.rate = 1.0;
+    speech.pitch = 1.0;
+    speech.volume = 1.0;
+
+    // Add speech controls UI
+    const controls = document.createElement('div');
+    controls.id = 'speech-controls';
+    controls.innerHTML = \`
+        <div style="position: fixed; bottom: 20px; right: 20px; background: white; 
+                    padding: 10px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
+            <button onclick="window.speechSynthesis.pause()">Pause</button>
+            <button onclick="window.speechSynthesis.resume()">Resume</button>
+            <button onclick="window.speechSynthesis.cancel(); document.body.removeChild(this.parentElement.parentElement)">Stop</button>
+        </div>
+    \`;
+
+    // Remove existing controls if any
+    const existingControls = document.getElementById('speech-controls');
+    if (existingControls) {
+        document.body.removeChild(existingControls);
+    }
+
+    // Add new controls
+    document.body.appendChild(controls);
+
+    // Start speaking
+    window.speechSynthesis.speak(speech);
+
+    // Clean up when done
+    speech.onend = function () {
+        const controls = document.getElementById('speech-controls');
+        if (controls) {
+            document.body.removeChild(controls);
+        }
+    };
+}`
+        },
+        'readSelectedNotes': {
+            title: 'readSelectedNotes() - Multiple Note Sequential Reading',
+            code: `/**
+ * Read multiple selected notes aloud using Web Speech API
+ * @function readSelectedNotes
+ * @returns {void}
+ * 
+ * Features:
+ * - Supports multiple note selection
+ * - Sequential reading with progress tracking
+ * - Pause/Resume/Stop controls
+ * - Browser compatibility check
+ * 
+ * Usage example:
+ * // Called when user clicks "Read Selected" button
+ */
+function readSelectedNotes() {
+    if (selectedNotes.size === 0) {
+        alert('Please select notes to read');
+        return;
+    }
+
+    if (!window.speechSynthesis) {
+        alert('Text-to-speech is not supported in your browser');
+        return;
+    }
+
+    // Cancel any ongoing speech
+    stopReading();
+
+    // Get all selected notes from Firestore
+    const notesToRead = [];
+    db.collection('notes')
+        .where('author', '==', currentUser.email)
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                if (selectedNotes.has(doc.id)) {
+                    notesToRead.push(doc.data());
+                }
+            });
+            startReading(notesToRead);
+        });
+}`
+        },
+        'deleteSelectedNotes': {
+            title: 'deleteSelectedNotes() - Batch Note Deletion',
+            code: `/**
+ * Delete all selected notes at once
+ * @function deleteSelectedNotes
+ * @returns {Promise} Firestore batch deletion promise
+ * 
+ * Features:
+ * - Validates that notes are selected
+ * - Shows confirmation with count of notes to delete
+ * - Uses Firestore batch operations for efficiency
+ * - Updates UI after completion
+ * 
+ * Usage example:
+ * // Called when user clicks "Delete Selected" button
+ */
 function deleteSelectedNotes() {
     if (selectedNotes.size === 0) {
         alert('Please select notes to delete');
         return;
     }
 
-    if (!confirm(`Are you sure you want to delete ${selectedNotes.size} selected note(s)?`)) {
+    if (!confirm(\`Are you sure you want to delete \${selectedNotes.size} selected note(s)?\`)) {
         return;
     }
 
@@ -295,8 +489,21 @@ function deleteSelectedNotes() {
             console.error('Error deleting notes:', error);
             alert('Failed to delete selected notes');
         });
-}
-
+}`
+        },
+        'deleteAllNotes': {
+            title: 'deleteAllNotes() - Delete All User Notes',
+            code: `/**
+ * Delete ALL notes for the current user
+ * @function deleteAllNotes
+ * @returns {Promise} Firestore batch deletion promise
+ * 
+ * DANGER: This is a destructive operation that deletes all user notes
+ * Includes additional safety confirmation
+ * 
+ * Usage example:
+ * // Called when user clicks "Delete All" button
+ */
 function deleteAllNotes() {
     if (!confirm('Are you sure you want to delete ALL notes? This action cannot be undone!')) {
         return;
@@ -322,404 +529,276 @@ function deleteAllNotes() {
             console.error('Error deleting all notes:', error);
             alert('Failed to delete all notes');
         });
-}
-
-// Update the read aloud functionality to handle multiple notes
-function readSelectedNotes() {
-    if (selectedNotes.size === 0) {
-        alert('Please select notes to read');
-        return;
-    }
-
-    if (!window.speechSynthesis) {
-        alert('Text-to-speech is not supported in your browser');
-        return;
-    }
-
-    // Cancel any ongoing speech
-    stopReading();
-
-    // Get all selected notes
-    const notesToRead = [];
-    db.collection('notes')
-        .where('author', '==', currentUser.email)
-        .get()
-        .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                if (selectedNotes.has(doc.id)) {
-                    notesToRead.push(doc.data());
-                }
-            });
-            startReading(notesToRead);
-        });
-}
-
-function startReading(notes) {
-    let currentIndex = 0;
-    isReadingAloud = true;
-
-    function readNext() {
-        if (currentIndex < notes.length && isReadingAloud) {
-            const note = notes[currentIndex];
-            const speech = new SpeechSynthesisUtterance(
-                `Note ${currentIndex + 1} of ${notes.length}. Title: ${note.title || 'Untitled'}. Content: ${note.body || 'Empty note'}`
-            );
-
-            speech.onend = () => {
-                currentIndex++;
-                readNext();
-            };
-
-            window.speechSynthesis.speak(speech);
+}`
         }
-    }
-
-    // Add speech controls
-    const controls = document.createElement('div');
-    controls.id = 'speech-controls';
-    controls.innerHTML = `
-        <div style="position: fixed; bottom: 20px; right: 20px; background: white; 
-                    padding: 10px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
-            <button onclick="pauseReading()">Pause</button>
-            <button onclick="resumeReading()">Resume</button>
-            <button onclick="stopReading()">Stop</button>
-            <div>Reading note ${currentIndex + 1} of ${notes.length}</div>
-        </div>
-    `;
-
-    // Remove existing controls if any
-    const existingControls = document.getElementById('speech-controls');
-    if (existingControls) {
-        document.body.removeChild(existingControls);
-    }
-
-    document.body.appendChild(controls);
-    readNext();
-}
-
-function pauseReading() {
-    window.speechSynthesis.pause();
-}
-
-function resumeReading() {
-    window.speechSynthesis.resume();
-}
-
-function stopReading() {
-    isReadingAloud = false;
-    window.speechSynthesis.cancel();
-    const controls = document.getElementById('speech-controls');
-    if (controls) {
-        document.body.removeChild(controls);
-    }
-}
-
-function displayNote(note) {
-    if (!note) return;
-
-    currentNote = note;
-    noteTitle.value = note.title || '';
-    noteBody.value = note.body || '';
-
-    const createdDate = note.createdAt ? note.createdAt.toDate().toLocaleString() : 'Unknown';
-    const updatedDate = note.updatedAt ? note.updatedAt.toDate().toLocaleString() : 'Unknown';
-
-    noteMetadata.textContent = `Created: ${createdDate} | Updated: ${updatedDate} | Author: ${note.author}`;
-    // document.getElementById('syncNoteBtn').style.display = note.shared ? 'inline-block' : 'none';
-}
-
-function clearNoteDisplay() {
-    noteTitle.value = '';
-    noteBody.value = '';
-    noteMetadata.textContent = '';
-   // document.getElementById('syncNoteBtn').style.display = 'none';
-}
-
-// Rest of the functions remain the same...
-function clearNoteDisplay() {
-    noteTitle.value = '';
-    noteBody.value = '';
-    noteMetadata.textContent = '';
-  //  document.getElementById('syncNoteBtn').style.display = 'none';
-    showLogo();
-}
-// Advanced features
-function exportNote() {
-    if (!currentNote) {
-        alert('Please select a note to export');
-        return;
-    }
-
-    const title = noteTitle.value || 'Untitled';
-    const body = noteBody.value || '';
-    const metadata = `Created: ${currentNote.createdAt.toDate().toLocaleString()}\nAuthor: ${currentNote.author}\n\n`;
-
-    // Create export options
-    const exportOptions = document.createElement('div');
-    exportOptions.innerHTML = `
-        <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-                    background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
-            <h3>Export Format</h3>
-            <button onclick="exportAs('markdown')">Markdown</button>
-            <button onclick="exportAs('pdf')">PDF</button>
-            <button onclick="exportAs('txt')">Text</button>
-            <button onclick="document.body.removeChild(this.parentElement.parentElement)">Cancel</button>
-        </div>
-    `;
-    document.body.appendChild(exportOptions);
-
-    // Export function
-    window.exportAs = function (format) {
-        let content = '';
-        let fileName = '';
-        let fileType = '';
-
-        switch (format) {
-            case 'markdown':
-                content = `# ${title}\n\n${metadata}${body}`;
-                fileName = `${title}.md`;
-                fileType = 'text/markdown';
-                break;
-            case 'txt':
-                content = `${title}\n\n${metadata}${body}`;
-                fileName = `${title}.txt`;
-                fileType = 'text/plain';
-                break;
-            case 'pdf':
-                // For PDF, we'll use html2pdf library
-                const element = document.createElement('div');
-                element.innerHTML = `<h1>${title}</h1><small>${metadata}</small><p>${body}</p>`;
-                html2pdf().from(element).save(`${title}.pdf`);
-                document.body.removeChild(exportOptions);
-                return;
-        }
-
-        // Create and trigger download
-        const blob = new Blob([content], { type: fileType });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        document.body.removeChild(exportOptions);
     };
 }
 
-// Modify the shareNote function (around line 208):
-function shareNote() {
-    if (!currentNote) return;
-
-    const shareCode = Math.random().toString(36).substring(2, 8);
-
-    db.collection('notes').doc(currentNote.id).update({
-        shared: true,
-        shareCode: shareCode,
-        sharedAt: firebase.firestore.Timestamp.now()
-    })
-        .then(() => {
-            currentNote.shared = true;
-            currentNote.shareCode = shareCode;
-          //  document.getElementById('syncNoteBtn').style.display = 'inline-block';
-            alert(`Share this code with others: ${shareCode}\nThey can access this note using the code.`);
-        })
-        .catch((error) => {
-            console.error('Error sharing note:', error);
-            alert('Failed to share note');
-        });
+/**
+ * Show detailed code for a specific function
+ * @param {string} functionName - The name of the function to show
+ */
+function showFunctionDetails(functionName) {
+    const snippet = window.functionCodeSnippets[functionName];
+    if (!snippet) return;
+    
+    const codePreview = document.getElementById('codePreview');
+    const codeTitle = document.getElementById('codeTitle');
+    const codeContent = document.getElementById('codeContent');
+    
+    if (codePreview && codeTitle && codeContent) {
+        codeTitle.textContent = snippet.title;
+        codeContent.textContent = snippet.code;
+        codeContent.className = 'language-javascript';
+        
+        // Show the code preview
+        codePreview.classList.add('active');
+        
+        // Scroll to the code preview
+        codePreview.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        
+        // Re-highlight the code if Prism.js is loaded
+        if (typeof Prism !== 'undefined') {
+            Prism.highlightElement(codeContent);
+        }
+    }
 }
 
-// Enhance the syncNote function (around line 219):
-function syncNote() {
-    if (!currentNote || !currentNote.shared) return;
+/**
+ * Close the code preview panel
+ */
+function closeCodePreview() {
+    const codePreview = document.getElementById('codePreview');
+    if (codePreview) {
+        codePreview.classList.remove('active');
+    }
+}
 
-    db.collection('notes').doc(currentNote.id).get()
-        .then((doc) => {
-            if (doc.exists) {
-                const updatedNote = { id: doc.id, ...doc.data() };
-                displayNote(updatedNote);
-                alert('Note synced successfully!');
+/**
+ * Set up modal functionality
+ */
+function setupModals() {
+    // Modal functionality is handled by onclick handlers in HTML
+    // This function can be extended for advanced modal features
+}
+
+/**
+ * Show the demo modal
+ */
+function showDemoModal() {
+    const modal = document.getElementById('demoModal');
+    if (modal) {
+        modal.classList.add('active');
+    }
+}
+
+/**
+ * Hide the demo modal
+ */
+function hideDemoModal() {
+    const modal = document.getElementById('demoModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+/**
+ * Set up scroll effects and animations
+ */
+function setupScrollEffects() {
+    // Add scroll-based animations for elements entering viewport
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
             }
-        })
-        .catch((error) => {
-            console.error('Error syncing note:', error);
-            alert('Failed to sync note');
         });
+    }, observerOptions);
+    
+    // Observe elements for scroll animations
+    document.querySelectorAll('.feature-card, .impl-category, .pattern-card, .color-item').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+    });
 }
 
-
-function readNoteAloud() {
-    if (!currentNote) {
-        alert('Please select a note to read');
-        return;
+/**
+ * Utility function to smooth scroll to element
+ * @param {string} elementId - ID of the element to scroll to
+ */
+function scrollToElement(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+}
 
-    // Check if speech synthesis is supported
-    if (!window.speechSynthesis) {
-        alert('Text-to-speech is not supported in your browser');
-        return;
+/**
+ * Add loading state to buttons
+ * @param {HTMLElement} button - The button element
+ * @param {boolean} isLoading - Whether to show loading state
+ */
+function setButtonLoading(button, isLoading = true) {
+    if (!button) return;
+    
+    if (isLoading) {
+        button.dataset.originalText = button.textContent;
+        button.textContent = 'Loading...';
+        button.disabled = true;
+        button.style.opacity = '0.7';
+    } else {
+        button.textContent = button.dataset.originalText || button.textContent;
+        button.disabled = false;
+        button.style.opacity = '1';
+        delete button.dataset.originalText;
     }
+}
 
-    // Cancel any ongoing speech
-    window.speechSynthesis.cancel();
+/**
+ * Format code for display with line numbers
+ * @param {string} code - The code to format
+ * @returns {string} Formatted code with line numbers
+ */
+function formatCodeWithLineNumbers(code) {
+    const lines = code.split('\n');
+    return lines.map((line, index) => {
+        const lineNumber = index + 1;
+        return `<span class="line-number">${lineNumber.toString().padStart(3, ' ')}</span> ${line}`;
+    }).join('\n');
+}
 
-    // Create speech content
-    const title = noteTitle.value || 'Untitled';
-    const body = noteBody.value || '';
-    const content = `${title}. ${body}`;
+/**
+ * Copy code to clipboard
+ * @param {string} code - The code to copy
+ */
+function copyCodeToClipboard(code) {
+    navigator.clipboard.writeText(code).then(() => {
+        // Show a temporary success message
+        showToast('Code copied to clipboard!', 'success');
+    }).catch(() => {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = code;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showToast('Code copied to clipboard!', 'success');
+    });
+}
 
-    // Create and configure speech utterance
-    const speech = new SpeechSynthesisUtterance(content);
-    speech.rate = 1.0;
-    speech.pitch = 1.0;
-    speech.volume = 1.0;
-
-    // Add speech controls
-    const controls = document.createElement('div');
-    controls.id = 'speech-controls';
-    controls.innerHTML = `
-        <div style="position: fixed; bottom: 20px; right: 20px; background: white; 
-                    padding: 10px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
-            <button onclick="window.speechSynthesis.pause()">Pause</button>
-            <button onclick="window.speechSynthesis.resume()">Resume</button>
-            <button onclick="window.speechSynthesis.cancel(); document.body.removeChild(this.parentElement.parentElement)">Stop</button>
-        </div>
-    `;
-
-    // Remove existing controls if any
-    const existingControls = document.getElementById('speech-controls');
-    if (existingControls) {
-        document.body.removeChild(existingControls);
+/**
+ * Show a temporary toast notification
+ * @param {string} message - The message to show
+ * @param {string} type - The type of toast (success, error, info)
+ */
+function showToast(message, type = 'info') {
+    // Remove existing toast if any
+    const existingToast = document.querySelector('.toast');
+    if (existingToast) {
+        existingToast.remove();
     }
+    
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    
+    // Style the toast
+    Object.assign(toast.style, {
+        position: 'fixed',
+        top: '20px',
+        right: '20px',
+        padding: '1rem 1.5rem',
+        borderRadius: '8px',
+        color: 'white',
+        fontWeight: '500',
+        zIndex: '10000',
+        opacity: '0',
+        transform: 'translateX(100%)',
+        transition: 'all 0.3s ease'
+    });
+    
+    // Set background color based on type
+    switch (type) {
+        case 'success':
+            toast.style.backgroundColor = '#28a745';
+            break;
+        case 'error':
+            toast.style.backgroundColor = '#dc3545';
+            break;
+        default:
+            toast.style.backgroundColor = '#007bff';
+    }
+    
+    // Add to document
+    document.body.appendChild(toast);
+    
+    // Show toast
+    setTimeout(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Hide toast after 3 seconds
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 300);
+    }, 3000);
+}
 
-    // Add new controls
-    document.body.appendChild(controls);
+/**
+ * Debounce function to limit the rate of function calls
+ * @param {Function} func - The function to debounce
+ * @param {number} wait - The wait time in milliseconds
+ * @returns {Function} Debounced function
+ */
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
 
-    // Start speaking
-    window.speechSynthesis.speak(speech);
-
-    // Clean up when done
-    speech.onend = function () {
-        const controls = document.getElementById('speech-controls');
-        if (controls) {
-            document.body.removeChild(controls);
+/**
+ * Throttle function to limit the rate of function calls
+ * @param {Function} func - The function to throttle
+ * @param {number} limit - The limit in milliseconds
+ * @returns {Function} Throttled function
+ */
+function throttle(func, limit) {
+    let inThrottle;
+    return function(...args) {
+        if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
         }
     };
 }
 
-// Settings and account management
-function openSettings() {
-    settingsModal.style.display = 'block';
-}
-
-function saveSettings() {
-    const fontStyle = document.getElementById('fontStyle').value;
-    document.body.style.fontFamily = fontStyle;
-
-    // Save settings to user's profile in Firebase
-    db.collection('users').doc(currentUser.uid).set({
-        settings: { fontStyle }
-    }, { merge: true })
-        .then(() => {
-            alert('Settings saved successfully');
-            settingsModal.style.display = 'none';
-        })
-        .catch((error) => {
-            console.error('Error saving settings:', error);
-            alert('Failed to save settings');
-        });
-}
-function deleteAccount() {
-    if (!confirm('Are you sure you want to delete your account? This action cannot be undone.')) return;
-
-    // Delete user's notes
-    db.collection('notes').where('author', '==', currentUser.email).get()
-        .then((querySnapshot) => {
-            const batch = db.batch();
-            querySnapshot.forEach((doc) => {
-                batch.delete(doc.ref);
-            });
-            return batch.commit();
-        })
-        .then(() => {
-            // Delete user's account
-            return currentUser.delete();
-        })
-        .then(() => {
-            alert('Account deleted successfully');
-            logout();
-        })
-        .catch((error) => {
-            console.error('Error deleting account:', error);
-            alert('Failed to delete account');
-        });
-}
-
-// Encryption functions -- it prompted before but removed now -- redundant code
-function setupEncryption() {
-    return;
-}
-
-function encryptData(data) {
-    if (!encryptionKey) return data;
-    return btoa(unescape(encodeURIComponent(data)) + encryptionKey);
-}
-
-function decryptData(data) {
-    if (!encryptionKey) return data;
-    return decodeURIComponent(escape(atob(data.replace(encryptionKey, ''))));
-}
-// Add these new functions:
-function closeSettings() {
-    settingsModal.style.display = 'none';
-}
-
-
-// Modify the closeCurrentNote function to handle both panels
-function closeCurrentNote(isSecond = false) {
-    if (isSecond) {
-        secondCurrentNote = null;
-        document.getElementById('secondNoteTitle').value = '';
-        document.getElementById('secondNoteBody').value = '';
-        document.getElementById('secondNoteMetadata').textContent = '';
-      //  document.getElementById('secondSyncNoteBtn').style.display = 'none';
-    } else {
-        currentNote = null;
-        document.getElementById('noteTitle').value = '';
-        document.getElementById('noteBody').value = '';
-        document.getElementById('noteMetadata').textContent = '';
-       // document.getElementById('syncNoteBtn').style.display = 'none';
-    }
-
-    if (!currentNote && !secondCurrentNote) {
-        showLogo();
-    }
-}
-
-function showLogo() {
-    document.getElementById('appLogo').style.display = 'block';
-    document.getElementById('noteEditor').style.display = 'none';
-    document.getElementById('noteActions').style.display = 'none';
-}
-
-function hideLogo() {
-    document.getElementById('appLogo').style.display = 'none';
-    document.getElementById('noteEditor').style.display = 'flex';
-    document.getElementById('noteActions').style.display = 'block';
-}
-
-// Initialize app
-// Add this function to initialize the app state:
-function initializeApp() {
-    showLogo();
-    if (currentUser) {
-        loadNotes();
-    } else {
-        showLoginModal();
-    }
-}
-
-
-document.addEventListener('DOMContentLoaded', initializeApp);
+// Export functions for global access
+window.showSection = showSection;
+window.showFunctionDetails = showFunctionDetails;
+window.closeCodePreview = closeCodePreview;
+window.showDemoModal = showDemoModal;
+window.hideDemoModal = hideDemoModal;
+window.copyCodeToClipboard = copyCodeToClipboard;

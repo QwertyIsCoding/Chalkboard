@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chalkboard</title>
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: black;
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin: 0;
+        }
+
+        p {
+            font-size: 1.5rem;
+            margin: 0.5rem 0 2rem 0;
+        }
+
+        .button {
+            font-size: 1rem;
+            padding: 1rem 2rem;
+            background-color: #007bff;
+            border: none;
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="../Media/chalkboardBanner.png" style="width: 350px; height: 100000;">
+        <br>
+        <p1>Built with JS, powered by Firebase</p1>
+        <br>
+        <p>Note, Remember, Move Forward</p>
+        <a href="app.html" class="button">Go to App</a>
+        <br>
+        <a href="info.html" class="button">Info</a>
+    </div>
+</body>
+
+</html>
