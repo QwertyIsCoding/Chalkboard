@@ -25,6 +25,7 @@
                 <button class="nav-btn" onclick="showSection('implementation')">Implementation</button>
                 <button class="nav-btn" onclick="showSection('program')">Program Architecture</button>
                 <button class="nav-btn" onclick="showSection('ui')">UI & Styling</button>
+                <button class="nav-btn" onclick="window.open('Application/app.html', '_blank')">Demo</button>
             </nav>
         </header>
 
@@ -68,9 +69,11 @@
                         <p>Detailed technical documentation for every function, including code snippets, Firebase
                             integration patterns, and implementation strategies.</p>
                         <div class="feature-meta">
-                            <span class="meta-item"><span class="material-icons">description</span> Detailed Functions</span>
+                            <span class="meta-item"><span class="material-icons">description</span> Detailed
+                                Functions</span>
                             <span class="meta-item"><span class="material-icons">build</span> Code Examples</span>
-                            <span class="meta-item"><span class="material-icons">rocket_launch</span> Firebase Integration</span>
+                            <span class="meta-item"><span class="material-icons">rocket_launch</span> Firebase
+                                Integration</span>
                         </div>
                     </div>
 
@@ -94,7 +97,8 @@
                         <div class="feature-meta">
                             <span class="meta-item"><span class="material-icons">gps_fixed</span> CSS Framework</span>
                             <span class="meta-item"><span class="material-icons">mouse</span> Event System</span>
-                            <span class="meta-item"><span class="material-icons">phone_iphone</span> Responsive Design</span>
+                            <span class="meta-item"><span class="material-icons">phone_iphone</span> Responsive
+                                Design</span>
                         </div>
                     </div>
                     <div class="feature-card" onclick="showSection('security')">
@@ -105,7 +109,8 @@
                         <div class="feature-meta">
                             <span class="meta-item"><span class="material-icons">security</span> Security</span>
                             <span class="meta-item"><span class="material-icons">flash_on</span> Performance</span>
-                            <span class="meta-item"><span class="material-icons">check_circle</span> Best Practices</span>
+                            <span class="meta-item"><span class="material-icons">check_circle</span> Best
+                                Practices</span>
                         </div>
                     </div>
                 </div>
@@ -223,7 +228,8 @@
                 <div class="code-preview" id="codePreview">
                     <div class="code-header">
                         <h4 id="codeTitle">Function Implementation</h4>
-                        <button class="close-btn" onclick="closeCodePreview()"><span class="material-icons">close</span></button>
+                        <button class="close-btn" onclick="closeCodePreview()"><span
+                                class="material-icons">close</span></button>
                     </div>
                     <pre><code id="codeContent" class="language-javascript"></code></pre>
                 </div>
@@ -408,14 +414,16 @@
         </main>
     </div>
 
-    <!-- Demo Modal -->
-    <div id="demoModal" class="modal">
-        <div class="modal-content">
-            <h3>Demo Modal</h3>
-            <p>This is an example of the modal component used throughout the application.</p>
-            <button class="btn-primary" onclick="hideDemoModal()">Close</button>
-        </div>
-    </div>
+    <!-- Footer -->
+    <center>
+        <footer>
+            <button class="nav-btn" onclick="window.location.href='info.html'">
+                <span class="material-icons">info</span> Info
+            </button>
+        </footer>
+    </center>
+    <br><br><br>
+    <!-- End Footer -->
 
     <script src="script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
