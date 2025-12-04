@@ -16,10 +16,11 @@
         <!-- Header -->
         <header>
             <div class="logo-container">
-                <div class="logo"><img src="../Media/chalkboardBanner.png" style="width: 350px; height: auto;"></div>
+                <div class="logo"><img src="Media/chalkboardBanner.png" style="width: 350px; height: auto;"></div>
                 <h3>Documentation</h3>
             </div>
             <nav>
+                <!-- <button class="nav-btn" onclick="showSection('docs')">Documentation</button> -->
                 <button class="nav-btn" onclick="showSection('overview')">Overview</button>
                 <button class="nav-btn" onclick="showSection('implementation')">Implementation</button>
                 <button class="nav-btn" onclick="showSection('program')">Program Architecture</button>
@@ -29,14 +30,24 @@
 
         <!-- Main Content -->
         <main>
+            <!-- Documentation Section -->
+            <section id="docs" class="content-section active">
+                <div class="hero">
+                    <h2>Comprehensive, detailed documentation.</h2>
+                    <p class="hero-description">
+                        Comprehensive documentation for Chalkboard - a modern,
+                        hyper-minimalist note-taking system built with Firebase, featuring text-to-speech,
+                        bulk operations, and real-time collaboration capabilities.
+                    </p>
+            </section>
             <!-- Overview Section -->
             <section id="overview" class="content-section active">
                 <div class="hero">
-                    <h2>Firebase-Powered Note-Taking Application</h2>
+                    <h2>Note. Remember. Move Forward.</h2>
                     <p class="hero-description">
-                        Comprehensive documentation for the Chalkboard application - a modern,
-                        feature-rich note-taking system built with Firebase, featuring text-to-speech,
-                        bulk operations, and real-time collaboration.
+                        Comprehensive documentation for Chalkboard - a modern,
+                        hyper-minimalist note-taking system built with Firebase, featuring text-to-speech,
+                        bulk operations, and real-time collaboration capabilities.
                     </p>
                     <div class="hero-stats">
                         <div class="stat">
