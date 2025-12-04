@@ -977,3 +977,270 @@ main {
     background-color: rgba(0, 123, 255, 0.3);
     color: white;
 }
+
+/* README Modal Styles */
+.readme-content {
+    max-width: 800px;
+    width: 90vw;
+    max-height: 80vh;
+}
+
+.readme-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #333;
+    padding-bottom: 1rem;
+}
+
+.readme-header h3 {
+    color: #007bff;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.readme-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.readme-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.readme-btn:hover {
+    background-color: #0056b3;
+}
+
+.readme-btn .material-icons {
+    font-size: 1.1rem;
+}
+
+.readme-body {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.readme-text {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 0;
+    font-family: 'Courier New', monospace;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* README Section Styling */
+.readme-section {
+    text-align: center;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #171414, #1a1a1a);
+    border-radius: 12px;
+    border: 1px solid #333;
+}
+
+/* Info Page Specific Styles */
+.llm-section, .project-info, .development-info {
+    margin: 3rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, #171414, #1a1a1a);
+    border-radius: 12px;
+    border: 1px solid #333;
+}
+
+.llm-content, .project-content {
+    display: grid;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.llm-card, .project-card {
+    padding: 1.5rem;
+    background: #222020;
+    border-radius: 8px;
+    border: 1px solid #444;
+}
+
+.tech-grid, .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.challenge-info {
+    margin-top: 1.5rem;
+}
+
+.challenge-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #2a2525;
+    border-radius: 8px;
+}
+
+.challenge-icon {
+    color: #007bff;
+    font-size: 1.5rem;
+}
+
+.challenge-details h5 {
+    margin: 0 0 0.5rem 0;
+    color: #007bff;
+}
+
+.challenge-details p {
+    margin: 0;
+    color: #ccc;
+}
+
+.project-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.project-link:hover {
+    text-decoration: underline;
+}
+
+.dev-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: #222020;
+    border-radius: 8px;
+    border: 1px solid #444;
+    text-align: center;
+}
+
+.stat-icon {
+    color: #007bff;
+    font-size: 2rem;
+}
+
+.stat-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.impact-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #2a2525;
+    border-radius: 8px;
+}
+
+.impact-benefits {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    background: #333;
+    border-radius: 8px;
+}
+
+.benefit-icon {
+    color: #28a745;
+    font-size: 1.5rem;
+}
+
+.benefit-content h5 {
+    margin: 0 0 0.5rem 0;
+    color: #28a745;
+}
+
+.benefit-content p {
+    margin: 0;
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: #2a2525;
+    border-radius: 6px;
+    color: #ccc;
+}
+
+.feature-item .material-icons {
+    color: #007bff;
+}
+
+/* Toast Notifications */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    z-index: 10000;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease;
+    max-width: 300px;
+    word-wrap: break-word;
+}
+
+.toast-success { background-color: #28a745; }
+.toast-error { background-color: #dc3545; }
+.toast-info { background-color: #007bff; }
+
+/* Print Styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}

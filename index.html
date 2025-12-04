@@ -9,6 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 </head>
 
 <body>
@@ -25,6 +28,7 @@
                 <button class="nav-btn" onclick="showSection('implementation')">Implementation</button>
                 <button class="nav-btn" onclick="showSection('program')">Program Architecture</button>
                 <button class="nav-btn" onclick="showSection('ui')">UI & Styling</button>
+                <button class="nav-btn" onclick="window.open('Application/app.html', '_blank')">Demo</button>
             </nav>
         </header>
 
@@ -68,9 +72,11 @@
                         <p>Detailed technical documentation for every function, including code snippets, Firebase
                             integration patterns, and implementation strategies.</p>
                         <div class="feature-meta">
-                            <span class="meta-item"><span class="material-icons">description</span> Detailed Functions</span>
+                            <span class="meta-item"><span class="material-icons">description</span> Detailed
+                                Functions</span>
                             <span class="meta-item"><span class="material-icons">build</span> Code Examples</span>
-                            <span class="meta-item"><span class="material-icons">rocket_launch</span> Firebase Integration</span>
+                            <span class="meta-item"><span class="material-icons">rocket_launch</span> Firebase
+                                Integration</span>
                         </div>
                     </div>
 
@@ -94,7 +100,8 @@
                         <div class="feature-meta">
                             <span class="meta-item"><span class="material-icons">gps_fixed</span> CSS Framework</span>
                             <span class="meta-item"><span class="material-icons">mouse</span> Event System</span>
-                            <span class="meta-item"><span class="material-icons">phone_iphone</span> Responsive Design</span>
+                            <span class="meta-item"><span class="material-icons">phone_iphone</span> Responsive
+                                Design</span>
                         </div>
                     </div>
                     <div class="feature-card" onclick="showSection('security')">
@@ -105,7 +112,8 @@
                         <div class="feature-meta">
                             <span class="meta-item"><span class="material-icons">security</span> Security</span>
                             <span class="meta-item"><span class="material-icons">flash_on</span> Performance</span>
-                            <span class="meta-item"><span class="material-icons">check_circle</span> Best Practices</span>
+                            <span class="meta-item"><span class="material-icons">check_circle</span> Best
+                                Practices</span>
                         </div>
                     </div>
                 </div>
@@ -220,10 +228,18 @@
                     </div>
                 </div>
 
+                <!-- README Button for Implementation -->
+                <!-- <div class="readme-section">
+                    <button class="btn-primary readme-btn" onclick="openReadmeModal('implementation')">
+                        <span class="material-icons">description</span> View Implementation README
+                    </button>
+                </div> -->
+
                 <div class="code-preview" id="codePreview">
                     <div class="code-header">
                         <h4 id="codeTitle">Function Implementation</h4>
-                        <button class="close-btn" onclick="closeCodePreview()"><span class="material-icons">close</span></button>
+                        <button class="close-btn" onclick="closeCodePreview()"><span
+                                class="material-icons">close</span></button>
                     </div>
                     <pre><code id="codeContent" class="language-javascript"></code></pre>
                 </div>
@@ -315,6 +331,13 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- README Button for Program Architecture -->
+                <!-- <div class="readme-section">
+                    <button class="btn-primary readme-btn" onclick="openReadmeModal('program')">
+                        <span class="material-icons">description</span> View Program Architecture README
+                    </button>
+                </div> -->
             </section>
 
             <!-- UI & Styling Section -->
@@ -404,9 +427,32 @@
                         </p>
                     </div>
                 </div>
+
+                <!-- README Button for UI & Styling -->
+                <!-- <div class="readme-section">
+                    <button class="btn-primary readme-btn" onclick="openReadmeModal('ui')">
+                        <span class="material-icons">description</span> View UI & Styling README
+                    </button>
+                </div> -->
             </section>
         </main>
     </div>
+
+    <!-- Footer -->
+    <center>
+        <footer>
+            <button class="nav-btn" onclick="window.location.href='info.html'">
+                <span class="material-icons">info</span>
+            </button>
+        </footer>
+    </center>
+    <br><br><br>
+    <center>
+        <!-- <div class="buttons">
+            <button id="open-readme" class="btn" type="button">Open README</button>
+        </div> -->
+    </center>
+    <!-- End Footer -->
 
     <!-- Demo Modal -->
     <div id="demoModal" class="modal">
@@ -416,6 +462,73 @@
             <button class="btn-primary" onclick="hideDemoModal()">Close</button>
         </div>
     </div>
+
+    <!-- README Modal -->
+    <!-- <div id="readmeModal" class="modal">
+        <div class="modal-content readme-content">
+            <div class="readme-header">
+                <h3><span class="material-icons">description</span> Project README</h3>
+                <div class="readme-actions">
+                    <button class="readme-btn" onclick="refreshReadme()">
+                        <span class="material-icons">refresh</span> Refresh
+                    </button>
+                    <button class="readme-btn" onclick="closeReadmeModal()">
+                        <span class="material-icons">close</span> Close
+                    </button>
+                </div>
+            </div>
+            <div class="readme-body">
+                <pre id="readmeContent" class="readme-text"></pre>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- README render area -->
+    <!-- <div id="doc-content" class="markdown-body" style="margin: 1rem auto; max-width: 800px; background-color: black; color: white; display: none;"></div>
+    <script>
+        (function () {
+            const btn = document.getElementById('open-readme');
+            const container = document.getElementById('doc-content');
+
+            async function fetchReadme() {
+                // Try common filename variants
+                const names = ['README.md', 'Readme.md', 'readme.md'];
+                let text = null;
+                for (const name of names) {
+                    try {
+                        const res = await fetch(name);
+                        if (!res.ok) continue;
+                        text = await res.text();
+                        break;
+                    } catch (e) {
+                        // continue to next variant
+                    }
+                }
+                return text;
+            }
+
+            async function showReadme() {
+                btn.disabled = true;
+                btn.textContent = 'Loading...';
+                const md = await fetchReadme();
+                if (!md) {
+                    btn.disabled = false;
+                    btn.textContent = 'Open README';
+                    container.style.display = 'block';
+                    container.innerHTML = '<p><em>Unable to load README.md. Ensure the file is available and served by your web server.</em></p>';
+                    return;
+                }
+                // Convert markdown -> HTML, sanitize, and insert
+                const html = marked.parse(md);
+                container.innerHTML = DOMPurify.sanitize(html);
+                container.style.display = 'block';
+                btn.textContent = 'Refresh README';
+                btn.disabled = false;
+            }
+
+            btn.addEventListener('click', showReadme);
+        })();
+    </script> -->
 
     <script src="script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>

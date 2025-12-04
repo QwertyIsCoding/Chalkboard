@@ -5,7 +5,43 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     initializeDocumentationSite();
+
+    // Ensure README button functionality is initialized
+    const btn = document.getElementById('open-readme');
+    if (btn) {
+        btn.addEventListener('click', async function() {
+            const container = document.getElementById('doc-content');
+            btn.disabled = true;
+            btn.textContent = 'Loading...';
+            const md = await fetchReadme();
+            if (!md) {
+                btn.disabled = false;
+                btn.textContent = 'Open README';
+                container.style.display = 'block';
+                container.innerHTML = '<p><em>Unable to load README.md. Ensure the file is available and served by your web server.</em></p>';
+                return;
+            }
+            const html = marked.parse(md);
+            container.innerHTML = DOMPurify.sanitize(html);
+            container.style.display = 'block';
+            btn.textContent = 'Refresh README';
+            btn.disabled = false;
+        });
+    }
 });
+
+async function fetchReadme() {
+    const names = ['README.md', 'Readme.md', 'readme.md'];
+    for (const name of names) {
+        try {
+            const res = await fetch(name);
+            if (res.ok) return await res.text();
+        } catch (e) {
+            // Continue to next variant
+        }
+    }
+    return null;
+}
 
 /**
  * Initialize the documentation site functionality
@@ -795,6 +831,13 @@ function throttle(func, limit) {
     };
 }
 
+window.copyCodeToClipboard = copyCodeToClipboard;
+
+// Export functions for global access
+window.openReadmeModal = openReadmeModal;
+window.closeReadmeModal = closeReadmeModal;
+window.refreshReadme = refreshReadme;
+
 // Export functions for global access
 window.showSection = showSection;
 window.showFunctionDetails = showFunctionDetails;
@@ -802,3 +845,6 @@ window.closeCodePreview = closeCodePreview;
 window.showDemoModal = showDemoModal;
 window.hideDemoModal = hideDemoModal;
 window.copyCodeToClipboard = copyCodeToClipboard;
+window.openReadmeModal = openReadmeModal;
+window.closeReadmeModal = closeReadmeModal;
+window.refreshReadme = refreshReadme;
