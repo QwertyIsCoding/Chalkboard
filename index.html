@@ -47,7 +47,9 @@
             </section>
             <!-- Overview Section -->
             <section id="overview" class="content-section active">
-                <div class="hero">
+                <div class="hero-container">
+                    <canvas id="chalkParticles"></canvas>
+                    <div class="hero">
                     <h2>Note. Remember. Move Forward.</h2>
                     <p class="hero-description">
                         Comprehensive documentation for Chalkboard - a modern,
@@ -64,6 +66,7 @@
                             <span class="stat-label">Code Coverage</span>
                         </div>
                     </div>
+                </div>
                 </div>
 
                 <div class="feature-grid">
@@ -446,16 +449,71 @@
     </div>
 
     <!-- Footer -->
-    <center>
-        <footer>
-            <button class="nav-btn" onclick="window.location.href='info.html'">
-                <span class="material-icons">info</span>
-            </button>
-        </footer>
-    </center>
-    <br><br><br>
-    <!-- End Footer -->
 
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About Chalkboard</h4>
+                <p>A modern, hyper-minimalist note-taking system built with Firebase, featuring text-to-speech, bulk operations, and real-time collaboration capabilities.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="#overview" onclick="showSection('overview')" class="footer-link">
+                        <span class="material-icons">dashboard</span> Overview
+                    </a></li>
+                    <li><a href="#implementation" onclick="showSection('implementation')" class="footer-link">
+                        <span class="material-icons">code</span> Implementation
+                    </a></li>
+                    <li><a href="#program" onclick="showSection('program')" class="footer-link">
+                        <span class="material-icons">architecture</span> Program Architecture
+                    </a></li>
+                    <li><a href="#ui" onclick="showSection('ui')" class="footer-link">
+                        <span class="material-icons">palette</span> UI & Styling
+                    </a></li>
+                    <li><a href="Application/app.html" target="_blank" class="footer-link">
+                        <span class="material-icons">play_arrow</span> Live Demo
+                    </a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul class="footer-links">
+                    <li><a href="https://firebase.google.com" target="_blank" class="footer-link">
+                        <span class="material-icons">local_fire_department</span> Firebase Docs
+                    </a></li>
+                    <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" class="footer-link">
+                        <span class="material-icons">article</span> JavaScript Docs
+                    </a></li>
+                    <li><a href="https://github.com/qwertyiscoding/chalkboard" target="_blank" class="footer-link">
+                        <span class="material-icons">code</span> GitHub Repository
+                    </a></li>
+                    <li><a href="licensing.html" target="_blank" class="footer-link">
+                        <span class="material-icons">book</span> Licensing
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <div class="footer-copyright">
+                    <p>© 2025 <strong>Pranav Somalinga</strong>. All rights reserved.</p>
+                    <p>Built with <span class="material-icons">favorite</span> using Firebase, JavaScript, and modern web technologies.</p>
+                </div>
+                <div class="footer-actions">
+                    <button class="nav-btn" onclick="window.location.href='info.html'">
+                        <span class="material-icons">info</span> Info
+                    </button>
+                    <button class="nav-btn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+                        <span class="material-icons">keyboard_arrow_up</span> Back to Top
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
     <!-- Demo Modal -->
     <div id="demoModal" class="modal">
         <div class="modal-content">

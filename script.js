@@ -826,9 +826,11 @@ function setupReadmeButton(buttonId, contentId, filePath) {
 
     button.addEventListener('click', async function () {
         if (content.style.display === 'block') {
+            // Hide the README content
             content.style.display = 'none';
             button.textContent = 'View README';
         } else {
+            // Show the README content
             button.disabled = true;
             button.textContent = 'Loading...';
             try {
@@ -1033,3 +1035,137 @@ window.closeCodePreview = closeCodePreview;
 window.showDemoModal = showDemoModal;
 window.hideDemoModal = hideDemoModal;
 window.copyCodeToClipboard = copyCodeToClipboard;
+
+// Chalk Particle Animation System
+class ChalkParticle {
+    constructor(canvas, x, y) {
+        this.canvas = canvas;
+        this.x = x || Math.random() * canvas.width;
+        this.y = y || Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.5;
+        this.opacity = Math.random() * 0.5 + 0.2;
+        this.life = Math.random() * 200 + 100;
+        this.maxLife = this.life;
+        // Chalk colors: white, light gray, slight blue tint
+        const colors = ['rgba(255,255,255,', 'rgba(200,200,210,', 'rgba(180,180,200,', 'rgba(220,220,230,'];
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    update(mouseX, mouseY) {
+        // Move particle
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.life--;
+
+        // Mouse interaction - particles drift away from cursor
+        if (mouseX !== null && mouseY !== null) {
+            const dx = this.x - mouseX;
+            const dy = this.y - mouseY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < 100) {
+                const force = (100 - distance) / 100;
+                this.speedX += (dx / distance) * force * 0.2;
+                this.speedY += (dy / distance) * force * 0.2;
+            }
+        }
+
+        // Dampen speed
+        this.speedX *= 0.99;
+        this.speedY *= 0.99;
+
+        // Fade out as life decreases
+        this.opacity = (this.life / this.maxLife) * 0.5;
+    }
+
+    draw(ctx) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color + this.opacity + ')';
+        ctx.fill();
+    }
+
+    isDead() {
+        return this.life <= 0 || this.x < 0 || this.x > this.canvas.width || this.y < 0 || this.y > this.canvas.height;
+    }
+}
+
+function initChalkParticles() {
+    const canvas = document.getElementById('chalkParticles');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let mouseX = null;
+    let mouseY = null;
+    let animationId;
+
+    function resizeCanvas() {
+        const container = canvas.parentElement;
+        canvas.width = container.offsetWidth;
+        canvas.height = container.offsetHeight;
+    }
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Track mouse position relative to canvas
+    canvas.parentElement.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mouseX = e.clientX - rect.left;
+        mouseY = e.clientY - rect.top;
+    });
+
+    canvas.parentElement.addEventListener('mouseleave', () => {
+        mouseX = null;
+        mouseY = null;
+    });
+
+    // Create particles on click
+    canvas.parentElement.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        for (let i = 0; i < 15; i++) {
+            particles.push(new ChalkParticle(canvas, x + (Math.random() - 0.5) * 30, y + (Math.random() - 0.5) * 30));
+        }
+    });
+
+    // Initial particles
+    for (let i = 0; i < 50; i++) {
+        particles.push(new ChalkParticle(canvas));
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Add new particles occasionally
+        if (Math.random() < 0.1 && particles.length < 100) {
+            particles.push(new ChalkParticle(canvas));
+        }
+
+        // Update and draw particles
+        particles = particles.filter(p => {
+            p.update(mouseX, mouseY);
+            if (!p.isDead()) {
+                p.draw(ctx);
+                return true;
+            }
+            return false;
+        });
+
+        animationId = requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+        cancelAnimationFrame(animationId);
+    });
+}
+
+// Initialize particles when DOM is ready
+document.addEventListener('DOMContentLoaded', initChalkParticles);
+
