@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chalkboard Framework - Developer Demo</title>
+    <link rel="stylesheet" href="../Application/styles.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Open+Sans:wght@400;600&family=Montserrat:wght@400;500&family=Playfair+Display:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .demo-section {
+            background-color: #171414;
+            border: 1px solid #171616;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .demo-section h3 {
+            margin-top: 0;
+            color: white;
+        }
+        
+        .code-example {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .feature-card {
+            background-color: #000000;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #333;
+            color: white;
+        }
+        
+        .feature-card h4 {
+            margin-top: 0;
+            color: #007bff;
+        }
+        
+        /* Remove custom demo-btn styles to use Application's styles.css */
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🎨 Chalkboard Framework - Developer Demo</h1>
+        <p>Complete demonstration of all framework features and UI components</p>
+
+        <!-- Setup Section -->
+        <div class="demo-section">
+            <h3>📋 1. Framework Setup</h3>
+            <p>Initialize the framework with your Firebase configuration:</p>
+            <div class="code-example">
+const chalkboard = new ChalkboardFramework({
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+});
+
+// Initialize with DOM elements
+chalkboard.initialize({
+  loginModalId: 'loginModal',
+  settingsModalId: 'settingsModal',
+  noteListId: 'noteList',
+  noteContentId: 'noteContent',
+  noteTitleId: 'noteTitle',
+  noteBodyId: 'noteBody',
+  noteMetadataId: 'noteMetadata'
+});
+            </div>
+            <button class="demo-btn" onclick="demoSetup()">Test Setup</button>
+        </div>
+
+        <!-- Authentication Section -->
+        <div class="demo-section">
+            <h3>🔐 2. Authentication</h3>
+            <p>User login and signup functionality:</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Login</h4>
+                    <p>Authenticate existing users</p>
+                    <button class="demo-btn" onclick="demoLogin()">Demo Login</button>
+                </div>
+                <div class="feature-card">
+                    <h4>Signup</h4>
+                    <p>Create new user accounts</p>
+                    <button class="demo-btn" onclick="demoSignup()">Demo Signup</button>
+                </div>
+                <div class="feature-card">
+                    <h4>Logout</h4>
+                    <p>Sign out current user</p>
+                    <button class="demo-btn" onclick="demoLogout()">Demo Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Note Management Section -->
+        <div class="demo-section">
+            <h3>📝 3. Note Management</h3>
+            <p>Create, edit, save, and delete notes:</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Create Note</h4>
+                    <p>Start a new blank note</p>
+                    <button class="demo-btn" onclick="demoCreateNote()">Create</button>
+                </div>
+                <div class="feature-card">
+                    <h4>Save Note</h4>
+                    <p>Save note to Firestore</p>
+                    <button class="demo-btn" onclick="demoSaveNote()">Save</button>
+                </div>
+                <div class="feature-card">
+                    <h4>Delete Note</h4>
+                    <p>Remove note from database</p>
+                    <button class="demo-btn" onclick="demoDeleteNote()">Delete</button>
+                </div>
+                <div class="feature-card">
+                    <h4>Load Notes</h4>
+                    <p>Fetch all user notes</p>
+                    <button class="demo-btn" onclick="demoLoadNotes()">Load</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bulk Operations Section -->
+        <div class="demo-section">
+            <h3>🗂️ 4. Bulk Operations</h3>
+            <p>Select and manage multiple notes:</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Select Notes</h4>
+                    <p>Choose multiple notes via checkboxes</p>
+                    <button class="demo-btn" onclick="demoSelectNotes()">Demo Selection</button>
+                </div>
+                <div class="feature-card">
+                    <h4>Delete Selected</h4>
+                    <p>Remove multiple notes at once</p>
+                    <button class="demo-btn" onclick="demoDeleteSelected()">Delete Selected</button>
+                </div>
+                <div class="feature-card">
+                    <h4>Delete All</h4>
+                    <p>Remove all user notes</p>
+                    <button class="demo-btn" onclick="demoDeleteAll()">Delete All</button>
+                </div>
+                <div class="feature-card">
+                    <h4>Read Selected</h4>
+                    <p>Play multiple notes via text-to-speech</p>
+                    <button class="demo-btn" onclick="demoReadSelected()">Read Selected</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Text-to-Speech Section -->
+        <div class="demo-section">
+            <h3>🔊 5. Text-to-Speech</h3>
+            <p>Audio playback and speech synthesis:</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Read Aloud</h4>
+                    <p>Play current note as audio</p>
+                    <button class="demo-btn" onclick="demoReadAloud()">Play Audio</button>
+                </div>
+                <div class="feature-card">
+                    <h4>Pause/Resume</h4>
+                    <p>Control audio playback</p>
+                    <button class="demo-btn" onclick="demoPauseResume()">Control</button>
+                </div>
+                <div class="feature-card">
+                    <h4>Stop Reading</h4>
+                    <p>Cancel audio playback</p>
+                    <button class="demo-btn" onclick="demoStopReading()">Stop</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Section -->
+        <div class="demo-section">
+            <h3>💾 6. Export Functionality</h3>
+            <p>Export notes in multiple formats:</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Export as Markdown</h4>
+                    <p>Download note as .md file</p>
+                    <button class="demo-btn" onclick="demoExportMarkdown()">Export MD</button>
+                </div>
+                <div class="feature-card">
+                    <h4>Export as Text</h4>
+                    <p>Download note as .txt file</p>
+                    <button class="demo-btn" onclick="demoExportText()">Export TXT</button>
+                </div>
+                <div class="feature-card">
+                    <h4>Export as PDF</h4>
+                    <p>Download note as .pdf file</p>
+                    <button class="demo-btn" onclick="demoExportPDF()">Export PDF</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- UI Components Section -->
+        <div class="demo-section">
+            <h3>🎨 7. UI Components</h3>
+            <p>Built-in UI element factory functions:</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Notifications</h4>
+                    <p>Display toast notifications</p>
+                    <button class="demo-btn" onclick="demoNotifications()">Show Notifications</button>
+                </div>
+                <div class="feature-card">
+                    <h4>Modals</h4>
+                    <p>Create dialog modals</p>
+                    <button class="demo-btn" onclick="demoModal()">Show Modal</button>
+                </div>
+                <div class="feature-card">
+                    <h4>Progress Bar</h4>
+                    <p>Display progress indicators</p>
+                    <button class="demo-btn" onclick="demoProgress()">Show Progress</button>
+                </div>
+                <div class="feature-card">
+                    <h4>Spinner</h4>
+                    <p>Loading state indicator</p>
+                    <button class="demo-btn" onclick="demoSpinner()">Show Spinner</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div class="demo-section">
+            <h3>⚙️ 8. Settings & Account</h3>
+            <p>User preferences and account management:</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Font Selection</h4>
+                    <p>Change application font</p>
+                    <button class="demo-btn" onclick="demoFontSelect()">Change Font</button>
+                </div>
+                <div class="feature-card">
+                    <h4>Save Settings</h4>
+                    <p>Persist user preferences</p>
+                    <button class="demo-btn" onclick="demoSaveSettings()">Save Settings</button>
+                </div>
+                <div class="feature-card">
+                    <h4>Delete Account</h4>
+                    <p>Remove user and all data</p>
+                    <button class="demo-btn" onclick="demoDeleteAccount()">Delete Account</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Examples Section -->
+        <div class="demo-section">
+            <h3>💻 9. Common Usage Examples</h3>
+            
+            <h4>Create a new note:</h4>
+            <div class="code-example">
+const note = chalkboard.createNote();
+console.log('New note created:', note);
+            </div>
+
+            <h4>Save current note:</h4>
+            <div class="code-example">
+chalkboard.saveNote()
+  .then(() => console.log('Note saved'))
+  .catch(error => console.error('Save failed:', error));
+            </div>
+
+            <h4>Load all notes:</h4>
+            <div class="code-example">
+chalkboard.loadNotes()
+  .then(notes => console.log(`Loaded ${notes.length} notes`))
+  .catch(error => console.error('Load failed:', error));
+            </div>
+
+            <h4>Use UI notifications:</h4>
+            <div class="code-example">
+chalkboard.createNotification('Operation successful!', 'success', 3000);
+chalkboard.createNotification('An error occurred', 'error', 5000);
+            </div>
+
+            <h4>Read note aloud:</h4>
+            <div class="code-example">
+chalkboard.readNoteAloud(); // Single note
+chalkboard.readSelectedNotes(); // Multiple selected notes
+            </div>
+
+            <h4>Export note:</h4>
+            <div class="code-example">
+chalkboard.exportNote('markdown'); // .md
+chalkboard.exportNote('txt');      // .txt
+chalkboard.exportNote('pdf');      // .pdf (requires html2pdf)
+            </div>
+        </div>
+
+        <!-- Integration Tips -->
+        <div class="demo-section">
+            <h3>🚀 10. Integration Tips</h3>
+            <ul>
+                <li><strong>Firebase Setup:</strong> Ensure Firebase SDK is loaded before initializing the framework</li>
+                <li><strong>CSS Styling:</strong> Include the styles.css file for consistent UI appearance</li>
+                <li><strong>HTML Structure:</strong> Create DOM elements with IDs matching your initialization config</li>
+                <li><strong>Error Handling:</strong> Always use .catch() to handle promise rejections</li>
+                <li><strong>User State:</strong> Check if user is authenticated before performing operations</li>
+                <li><strong>Text-to-Speech:</strong> Test browser compatibility before deploying</li>
+                <li><strong>Export PDF:</strong> Include html2pdf library for PDF export: <code>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"&gt;&lt;/script&gt;</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebaseapp.js"></script>
+    <script src="framework.js"></script>
+    <script>
+        // Demo placeholder functions
+        const demoFunctions = {
+            demoSetup: () => console.log('Setup demo'),
+            demoLogin: () => console.log('Login demo'),
+            demoSignup: () => console.log('Signup demo'),
+            demoLogout: () => console.log('Logout demo'),
+            demoCreateNote: () => console.log('Create note demo'),
+            demoSaveNote: () => console.log('Save note demo'),
+            demoDeleteNote: () => console.log('Delete note demo'),
+            demoLoadNotes: () => console.log('Load notes demo'),
+            demoSelectNotes: () => console.log('Select notes demo'),
+            demoDeleteSelected: () => console.log('Delete selected demo'),
+            demoDeleteAll: () => console.log('Delete all demo'),
+            demoReadSelected: () => console.log('Read selected demo'),
+            demoReadAloud: () => console.log('Read aloud demo'),
+            demoPauseResume: () => console.log('Pause/resume demo'),
+            demoStopReading: () => console.log('Stop reading demo'),
+            demoExportMarkdown: () => console.log('Export markdown demo'),
+            demoExportText: () => console.log('Export text demo'),
+            demoExportPDF: () => console.log('Export PDF demo'),
+            demoNotifications: () => console.log('Notifications demo'),
+            demoModal: () => console.log('Modal demo'),
+            demoProgress: () => console.log('Progress demo'),
+            demoSpinner: () => console.log('Spinner demo'),
+            demoFontSelect: () => console.log('Font select demo'),
+            demoSaveSettings: () => console.log('Save settings demo'),
+            demoDeleteAccount: () => console.log('Delete account demo')
+        };
+
+        // Make all demo functions available globally
+        Object.assign(window, demoFunctions);
+    </script>
+</body>
+</html>

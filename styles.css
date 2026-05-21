@@ -157,6 +157,7 @@ main {
     line-height: 1.8;
 }
 
+
 .hero-stats {
     display: flex;
     justify-content: center;
@@ -605,6 +606,13 @@ main {
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
     font-size: 0.85rem;
     border: 1px solid #333;
+    overflow-x: auto;
+    overflow-y: hidden;
+    word-break: break-word;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    max-width: 100%;
 }
 
 /* Design System */
